@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 pub mod builtin;
+pub mod clean;
 pub mod crop;
 pub mod document;
 pub mod expr;
