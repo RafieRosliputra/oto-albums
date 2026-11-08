@@ -1,0 +1,25 @@
+custom = false
+family = "classic"
+gutter_policy = "safe"
+id = "oto-classic-04"
+kind = "spread"
+name = "Matted right"
+orientation = "S"
+photo_count = 1
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.84
+id = "r1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "right_page"
+role = "hero"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0

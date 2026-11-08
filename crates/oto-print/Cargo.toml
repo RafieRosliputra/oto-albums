@@ -1,0 +1,30 @@
+[package]
+name = "oto-print"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+oto-core.workspace = true
+oto-media.workspace = true
+oto-render.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+uuid.workspace = true
+time.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+image.workspace = true
+pdf-writer.workspace = true
+subsetter.workspace = true
+ttf-parser.workspace = true
+miniz_oxide.workspace = true
+sha2.workspace = true
+zip.workspace = true
+crossbeam-channel.workspace = true
+rayon.workspace = true
+lopdf = "0.34"
+
+[dev-dependencies]

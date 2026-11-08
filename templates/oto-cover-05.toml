@@ -1,0 +1,54 @@
+custom = false
+family = "cover"
+gutter_policy = "full_bleed"
+id = "oto-cover-05"
+kind = "cover"
+name = "Small square"
+orientation = "S"
+photo_count = 1
+style = "any"
+tags = ["cover"]
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.36
+id = "f1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "front"
+role = "hero"
+w = 0.36
+x = 0.32
+y = 0.22
+z = 0
+
+[[texts]]
+h = 0.1
+placeholder = "Our Story"
+preset = "h1"
+region = "front"
+rotation_mdeg = 0
+w = 0.76
+x = 0.12
+y = 0.64
+
+[[texts]]
+h = 0.05
+placeholder = "2026"
+preset = "cover_subtitle"
+region = "front"
+rotation_mdeg = 0
+w = 0.76
+x = 0.12
+y = 0.76
+
+[[texts]]
+h = 0.7
+placeholder = "AINA & DANIAL"
+preset = "cover_subtitle"
+region = "spine"
+rotation_mdeg = 90000
+w = 1.0
+x = 0.0
+y = 0.15

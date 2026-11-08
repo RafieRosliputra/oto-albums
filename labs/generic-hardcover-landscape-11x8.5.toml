@@ -1,0 +1,37 @@
+# Example profile — NOT a real lab. Landscape hardcover with a calculated spine.
+schema_version = 1
+id = "generic-hardcover-landscape-11x8-5"
+name = "Generic Hardcover Landscape 11x8.5 (example)"
+country = "MY"
+units = "in"
+source = "example-only"
+verified_at = "2026-10-25"
+binding = "layflat"
+
+[[sizes]]
+id = "11x8.5"
+page_width_mm = 279.4
+page_height_mm = 215.9
+bleed_mm = 3.175
+trim_outer_mm = 3
+trim_inside_mm = 0
+safe_mm = 6.35
+gutter_mm = 12
+min_pages = 20
+max_pages = 120
+page_increment = 2
+
+[color]
+profile = "sRGB"
+pdf_standard = "PDF/X-4"
+dpi = 300
+
+[cover]
+type = "hardcover"
+wrap_mm = 18
+hinge_mm = 10
+bleed_mm = 3.175
+safe_mm = 10
+spine_formula = "pages * paper_caliper_mm / 2 + 3.0"
+paper_caliper_mm = 0.45
+min_spine_mm = 8

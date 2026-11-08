@@ -1,0 +1,11 @@
+[package]
+name = "oto-platform"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+rfd.workspace = true
+thiserror.workspace = true
+directories.workspace = true

@@ -1,0 +1,25 @@
+custom = false
+family = "panorama"
+gutter_policy = "no_face"
+id = "oto-panorama-x02"
+kind = "spread"
+name = "Panorama matted"
+orientation = "L"
+photo_count = 1
+style = "classic"
+tags = ["crosses-fold"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.8
+id = "p1"
+max_aspect = 3.94
+min_aspect = 1.29
+region = "surface"
+role = "hero"
+w = 0.9
+x = 0.05
+y = 0.1
+z = 0

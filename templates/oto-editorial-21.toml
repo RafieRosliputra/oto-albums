@@ -1,0 +1,41 @@
+custom = false
+family = "editorial"
+gutter_policy = "safe"
+id = "oto-editorial-21"
+kind = "spread"
+name = "Detail + bleed"
+orientation = "PS"
+photo_count = 2
+style = "editorial"
+tags = [
+    "contrast",
+    "full-bleed-page",
+]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.46
+id = "l1"
+max_aspect = 1.52
+min_aspect = 0.5
+region = "left_page"
+role = "detail"
+w = 0.4
+x = 0.3
+y = 0.27
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "r1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "right_page"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0

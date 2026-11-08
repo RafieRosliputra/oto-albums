@@ -1,0 +1,38 @@
+custom = false
+family = "hero-strip"
+gutter_policy = "safe"
+id = "oto-hero-strip-13"
+kind = "spread"
+name = "Matted + bleed"
+orientation = "SS"
+photo_count = 2
+style = "editorial"
+tags = ["full-bleed-page"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.84
+id = "l1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "r1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "right_page"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0

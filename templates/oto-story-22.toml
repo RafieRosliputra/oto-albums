@@ -1,0 +1,57 @@
+custom = false
+family = "story"
+gutter_policy = "safe"
+id = "oto-story-22"
+kind = "spread"
+name = "Story + pair"
+orientation = "LL"
+photo_count = 2
+style = "classic"
+tags = ["text"]
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "r1"
+max_aspect = 3.65
+min_aspect = 1.19
+region = "right_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "r2"
+max_aspect = 3.65
+min_aspect = 1.19
+region = "right_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.5175
+z = 0
+
+[[texts]]
+h = 0.12
+placeholder = "Chapter title"
+preset = "h2"
+region = "left_page"
+rotation_mdeg = 0
+w = 0.72
+x = 0.14
+y = 0.34
+
+[[texts]]
+h = 0.2
+placeholder = "A few lines about this moment, the people in it and why it mattered."
+preset = "body"
+region = "left_page"
+rotation_mdeg = 0
+w = 0.72
+x = 0.14
+y = 0.5

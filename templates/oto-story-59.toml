@@ -1,0 +1,32 @@
+custom = false
+family = "story"
+frames = []
+gutter_policy = "safe"
+id = "oto-story-59"
+kind = "spread"
+name = "Story right"
+orientation = ""
+photo_count = 0
+style = "any"
+tags = ["text"]
+version = 1
+
+[[texts]]
+h = 0.12
+placeholder = "Chapter title"
+preset = "h2"
+region = "right_page"
+rotation_mdeg = 0
+w = 0.72
+x = 0.14
+y = 0.34
+
+[[texts]]
+h = 0.2
+placeholder = "A few lines about this moment, the people in it and why it mattered."
+preset = "body"
+region = "right_page"
+rotation_mdeg = 0
+w = 0.72
+x = 0.14
+y = 0.5

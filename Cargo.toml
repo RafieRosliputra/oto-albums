@@ -1,0 +1,72 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/oto-core",
+    "crates/oto-media",
+    "crates/oto-store",
+    "crates/oto-render",
+    "crates/oto-print",
+    "crates/oto-proof",
+    "crates/oto-ui",
+    "crates/oto-platform",
+    "crates/oto-app",
+    "crates/oto-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "LicenseRef-Proprietary"
+authors = ["Johor Studio"]
+rust-version = "1.80"
+
+[workspace.dependencies]
+oto-core = { path = "crates/oto-core" }
+oto-media = { path = "crates/oto-media" }
+oto-store = { path = "crates/oto-store" }
+oto-render = { path = "crates/oto-render" }
+oto-print = { path = "crates/oto-print" }
+oto-proof = { path = "crates/oto-proof" }
+oto-ui = { path = "crates/oto-ui" }
+oto-platform = { path = "crates/oto-platform" }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+uuid = { version = "1", features = ["v7", "serde"] }
+time = { version = "0.3", features = ["formatting", "parsing", "serde", "macros", "local-offset"] }
+thiserror = "2"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+rayon = "1"
+crossbeam-channel = "0.5"
+blake3 = "1"
+sha2 = "0.10"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "tiff", "webp", "rayon"] }
+kamadak-exif = "0.5"
+psd = "0.3"
+rusqlite = { version = "0.32", features = ["bundled", "backup"] }
+pdf-writer = "0.12"
+subsetter = "0.2"
+ttf-parser = "0.25"
+ab_glyph = "0.2"
+miniz_oxide = "0.8"
+zip = { version = "2", default-features = false, features = ["deflate"] }
+egui = "0.31"
+eframe = { version = "0.31", default-features = false, features = ["wgpu", "accesskit", "default_fonts"] }
+rfd = "0.15"
+directories = "5"
+proptest = "1"
+criterion = { version = "0.5", default-features = false }
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4

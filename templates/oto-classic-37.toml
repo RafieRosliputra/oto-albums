@@ -1,0 +1,64 @@
+custom = false
+family = "classic"
+gutter_policy = "safe"
+id = "oto-classic-37"
+kind = "spread"
+name = "Matted + columns"
+orientation = "SPPP"
+photo_count = 4
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.84
+id = "l1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "hero"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.56
+id = "r1"
+max_aspect = 0.8
+min_aspect = 0.26
+region = "right_page"
+role = "detail"
+w = 0.2567
+x = 0.08
+y = 0.22
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.56
+id = "r2"
+max_aspect = 0.8
+min_aspect = 0.26
+region = "right_page"
+role = "detail"
+w = 0.2567
+x = 0.3717
+y = 0.22
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.56
+id = "r3"
+max_aspect = 0.8
+min_aspect = 0.26
+region = "right_page"
+role = "detail"
+w = 0.2567
+x = 0.6633
+y = 0.22
+z = 0

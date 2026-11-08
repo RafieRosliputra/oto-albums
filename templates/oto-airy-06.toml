@@ -1,0 +1,25 @@
+custom = false
+family = "airy"
+gutter_policy = "safe"
+id = "oto-airy-06"
+kind = "spread"
+name = "Small right"
+orientation = "P"
+photo_count = 1
+style = "airy"
+tags = ["whitespace"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.46
+id = "r1"
+max_aspect = 1.52
+min_aspect = 0.5
+region = "right_page"
+role = "hero"
+w = 0.4
+x = 0.3
+y = 0.27
+z = 0

@@ -1,0 +1,28 @@
+custom = false
+family = "full-bleed"
+gutter_policy = "safe"
+id = "oto-full-bleed-01"
+kind = "spread"
+name = "Left page bleed"
+orientation = "S"
+photo_count = 1
+style = "editorial"
+tags = [
+    "quiet",
+    "full-bleed-page",
+]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "l1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0

@@ -1,0 +1,44 @@
+custom = false
+family = "cover"
+gutter_policy = "full_bleed"
+id = "oto-cover-06"
+kind = "cover"
+name = "Top photo"
+orientation = "L"
+photo_count = 1
+style = "any"
+tags = ["cover"]
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.62
+id = "f1"
+max_aspect = 2.82
+min_aspect = 0.92
+region = "front"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0
+
+[[texts]]
+h = 0.1
+placeholder = "Aina & Danial"
+preset = "cover_title"
+region = "front"
+rotation_mdeg = 0
+w = 0.8
+x = 0.1
+y = 0.7
+
+[[texts]]
+h = 0.05
+placeholder = "25 · 10 · 2026"
+preset = "cover_subtitle"
+region = "front"
+rotation_mdeg = 0
+w = 0.8
+x = 0.1
+y = 0.82

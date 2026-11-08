@@ -1,0 +1,18 @@
+[package]
+name = "oto-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "oto-albums — design the story, print it right"
+
+[[bin]]
+name = "oto-albums"
+path = "src/main.rs"
+
+[dependencies]
+oto-ui.workspace = true
+oto-platform.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+time.workspace = true

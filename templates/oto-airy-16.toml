@@ -1,0 +1,38 @@
+custom = false
+family = "airy"
+gutter_policy = "safe"
+id = "oto-airy-16"
+kind = "spread"
+name = "Twin small"
+orientation = "PP"
+photo_count = 2
+style = "airy"
+tags = ["whitespace"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.46
+id = "l1"
+max_aspect = 1.52
+min_aspect = 0.5
+region = "left_page"
+role = "support"
+w = 0.4
+x = 0.3
+y = 0.27
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.46
+id = "r1"
+max_aspect = 1.52
+min_aspect = 0.5
+region = "right_page"
+role = "support"
+w = 0.4
+x = 0.3
+y = 0.27
+z = 0

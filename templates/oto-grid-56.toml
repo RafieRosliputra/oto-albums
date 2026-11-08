@@ -1,0 +1,116 @@
+custom = false
+family = "grid"
+gutter_policy = "safe"
+id = "oto-grid-56"
+kind = "spread"
+name = "Twin strips"
+orientation = "LPPPLPPP"
+photo_count = 8
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.4991
+id = "l1"
+max_aspect = 2.95
+min_aspect = 0.96
+region = "left_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3059
+id = "l2"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "left_page"
+role = "detail"
+w = 0.2567
+x = 0.08
+y = 0.6141
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3059
+id = "l3"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "left_page"
+role = "detail"
+w = 0.2567
+x = 0.3717
+y = 0.6141
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3059
+id = "l4"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "left_page"
+role = "detail"
+w = 0.2567
+x = 0.6633
+y = 0.6141
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4991
+id = "r1"
+max_aspect = 2.95
+min_aspect = 0.96
+region = "right_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3059
+id = "r2"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "right_page"
+role = "detail"
+w = 0.2567
+x = 0.08
+y = 0.6141
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3059
+id = "r3"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "right_page"
+role = "detail"
+w = 0.2567
+x = 0.3717
+y = 0.6141
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3059
+id = "r4"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "right_page"
+role = "detail"
+w = 0.2567
+x = 0.6633
+y = 0.6141
+z = 0

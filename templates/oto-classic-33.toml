@@ -1,0 +1,64 @@
+custom = false
+family = "classic"
+gutter_policy = "safe"
+id = "oto-classic-33"
+kind = "spread"
+name = "Four portraits"
+orientation = "PPPP"
+photo_count = 4
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.68
+id = "l1"
+max_aspect = 1.04
+min_aspect = 0.34
+region = "left_page"
+role = "support"
+w = 0.4025
+x = 0.08
+y = 0.16
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.68
+id = "l2"
+max_aspect = 1.04
+min_aspect = 0.34
+region = "left_page"
+role = "support"
+w = 0.4025
+x = 0.5175
+y = 0.16
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.68
+id = "r1"
+max_aspect = 1.04
+min_aspect = 0.34
+region = "right_page"
+role = "support"
+w = 0.4025
+x = 0.08
+y = 0.16
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.68
+id = "r2"
+max_aspect = 1.04
+min_aspect = 0.34
+region = "right_page"
+role = "support"
+w = 0.4025
+x = 0.5175
+y = 0.16
+z = 0

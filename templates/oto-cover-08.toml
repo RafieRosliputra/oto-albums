@@ -1,0 +1,47 @@
+custom = false
+family = "cover"
+gutter_policy = "full_bleed"
+id = "oto-cover-08"
+kind = "cover"
+name = "Stacked front"
+orientation = "LL"
+photo_count = 2
+style = "any"
+tags = ["cover"]
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.38
+id = "f1"
+max_aspect = 3.32
+min_aspect = 1.08
+region = "front"
+role = "hero"
+w = 0.72
+x = 0.14
+y = 0.1
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.28
+id = "f2"
+max_aspect = 4.5
+min_aspect = 1.47
+region = "front"
+role = "support"
+w = 0.72
+x = 0.14
+y = 0.52
+z = 0
+
+[[texts]]
+h = 0.06
+placeholder = "AINA & DANIAL"
+preset = "cover_subtitle"
+region = "front"
+rotation_mdeg = 0
+w = 0.72
+x = 0.14
+y = 0.84

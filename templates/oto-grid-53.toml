@@ -1,0 +1,103 @@
+custom = false
+family = "grid"
+gutter_policy = "safe"
+id = "oto-grid-53"
+kind = "spread"
+name = "Grid + feature"
+orientation = "SSSSPPP"
+photo_count = 7
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "l1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "support"
+w = 0.4025
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "l2"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "support"
+w = 0.4025
+x = 0.5175
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "l3"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "support"
+w = 0.4025
+x = 0.08
+y = 0.5175
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "l4"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "support"
+w = 0.4025
+x = 0.5175
+y = 0.5175
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.84
+id = "r1"
+max_aspect = 0.97
+min_aspect = 0.32
+region = "right_page"
+role = "hero"
+w = 0.4669
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "r2"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "right_page"
+role = "support"
+w = 0.3381
+x = 0.5819
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4025
+id = "r3"
+max_aspect = 1.47
+min_aspect = 0.48
+region = "right_page"
+role = "support"
+w = 0.3381
+x = 0.5819
+y = 0.5175
+z = 0

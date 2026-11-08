@@ -1,0 +1,64 @@
+custom = false
+family = "classic"
+gutter_policy = "safe"
+id = "oto-classic-40"
+kind = "spread"
+name = "Portrait + trio"
+orientation = "PLLL"
+photo_count = 4
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.8
+id = "l1"
+max_aspect = 1.4
+min_aspect = 0.46
+region = "left_page"
+role = "hero"
+w = 0.64
+x = 0.18
+y = 0.1
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4508
+id = "r1"
+max_aspect = 3.26
+min_aspect = 1.06
+region = "right_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3542
+id = "r2"
+max_aspect = 1.99
+min_aspect = 0.65
+region = "right_page"
+role = "detail"
+w = 0.4025
+x = 0.08
+y = 0.5658
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3542
+id = "r3"
+max_aspect = 1.99
+min_aspect = 0.65
+region = "right_page"
+role = "detail"
+w = 0.4025
+x = 0.5175
+y = 0.5658
+z = 0

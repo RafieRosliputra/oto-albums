@@ -1,0 +1,34 @@
+custom = false
+family = "cover"
+gutter_policy = "full_bleed"
+id = "oto-cover-02"
+kind = "cover"
+name = "Front photo"
+orientation = "S"
+photo_count = 1
+style = "any"
+tags = ["cover"]
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "f1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "front"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0
+
+[[texts]]
+h = 0.7
+placeholder = "AINA & DANIAL"
+preset = "cover_subtitle"
+region = "spine"
+rotation_mdeg = 90000
+w = 1.0
+x = 0.0
+y = 0.15

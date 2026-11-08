@@ -1,0 +1,32 @@
+custom = false
+family = "cover"
+frames = []
+gutter_policy = "full_bleed"
+id = "oto-cover-11"
+kind = "cover"
+name = "Stamp style"
+orientation = ""
+photo_count = 0
+style = "any"
+tags = ["cover"]
+version = 1
+
+[[texts]]
+h = 0.1
+placeholder = "A & D"
+preset = "h1"
+region = "front"
+rotation_mdeg = 0
+w = 0.6
+x = 0.2
+y = 0.45
+
+[[texts]]
+h = 0.7
+placeholder = "AINA & DANIAL"
+preset = "cover_subtitle"
+region = "spine"
+rotation_mdeg = 90000
+w = 1.0
+x = 0.0
+y = 0.15

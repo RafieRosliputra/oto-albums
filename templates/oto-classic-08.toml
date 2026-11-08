@@ -1,0 +1,25 @@
+custom = false
+family = "classic"
+gutter_policy = "safe"
+id = "oto-classic-08"
+kind = "spread"
+name = "Landscape left"
+orientation = "L"
+photo_count = 1
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.52
+id = "l1"
+max_aspect = 2.69
+min_aspect = 0.88
+region = "left_page"
+role = "hero"
+w = 0.8
+x = 0.1
+y = 0.24
+z = 0

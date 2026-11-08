@@ -1,0 +1,25 @@
+custom = false
+family = "airy"
+gutter_policy = "safe"
+id = "oto-airy-07"
+kind = "spread"
+name = "Portrait right"
+orientation = "P"
+photo_count = 1
+style = "airy"
+tags = ["whitespace"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.8
+id = "r1"
+max_aspect = 1.4
+min_aspect = 0.46
+region = "right_page"
+role = "hero"
+w = 0.64
+x = 0.18
+y = 0.1
+z = 0

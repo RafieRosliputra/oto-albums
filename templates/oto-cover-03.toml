@@ -1,0 +1,25 @@
+custom = false
+family = "cover"
+gutter_policy = "full_bleed"
+id = "oto-cover-03"
+kind = "cover"
+name = "Full wrap photo"
+orientation = "L"
+photo_count = 1
+style = "any"
+tags = ["cover"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "f1"
+max_aspect = 3.4
+min_aspect = 1.11
+region = "surface"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0

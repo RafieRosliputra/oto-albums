@@ -1,0 +1,57 @@
+custom = false
+family = "cover"
+gutter_policy = "full_bleed"
+id = "oto-cover-10"
+kind = "cover"
+name = "Back detail"
+orientation = "LL"
+photo_count = 2
+style = "any"
+tags = ["cover"]
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.6
+id = "f1"
+max_aspect = 2.33
+min_aspect = 0.76
+region = "front"
+role = "hero"
+w = 0.8
+x = 0.1
+y = 0.1
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.36
+id = "b1"
+max_aspect = 1.94
+min_aspect = 0.63
+region = "back"
+role = "detail"
+w = 0.4
+x = 0.3
+y = 0.32
+z = 0
+
+[[texts]]
+h = 0.08
+placeholder = "Aina & Danial"
+preset = "h2"
+region = "front"
+rotation_mdeg = 0
+w = 0.8
+x = 0.1
+y = 0.76
+
+[[texts]]
+h = 0.7
+placeholder = "AINA & DANIAL"
+preset = "cover_subtitle"
+region = "spine"
+rotation_mdeg = 90000
+w = 1.0
+x = 0.0
+y = 0.15

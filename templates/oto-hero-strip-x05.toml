@@ -1,0 +1,64 @@
+custom = false
+family = "hero-strip"
+gutter_policy = "no_face"
+id = "oto-hero-strip-x05"
+kind = "spread"
+name = "Wide hero + column"
+orientation = "LLLL"
+photo_count = 4
+style = "editorial"
+tags = ["crosses-fold"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "p1"
+max_aspect = 2.24
+min_aspect = 0.73
+region = "surface"
+role = "hero"
+w = 0.64
+x = 0.0
+y = 0.0
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.26
+id = "p2"
+max_aspect = 3.77
+min_aspect = 1.23
+region = "surface"
+role = "detail"
+w = 0.28
+x = 0.68
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.26
+id = "p3"
+max_aspect = 3.77
+min_aspect = 1.23
+region = "surface"
+role = "detail"
+w = 0.28
+x = 0.68
+y = 0.37
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.26
+id = "p4"
+max_aspect = 3.77
+min_aspect = 1.23
+region = "surface"
+role = "detail"
+w = 0.28
+x = 0.68
+y = 0.66
+z = 0

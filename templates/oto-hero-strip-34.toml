@@ -1,0 +1,64 @@
+custom = false
+family = "hero-strip"
+gutter_policy = "safe"
+id = "oto-hero-strip-34"
+kind = "spread"
+name = "Bleed + trio"
+orientation = "SLLL"
+photo_count = 4
+style = "editorial"
+tags = ["full-bleed-page"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "l1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "left_page"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.4508
+id = "r1"
+max_aspect = 3.26
+min_aspect = 1.06
+region = "right_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3542
+id = "r2"
+max_aspect = 1.99
+min_aspect = 0.65
+region = "right_page"
+role = "detail"
+w = 0.4025
+x = 0.08
+y = 0.5658
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3542
+id = "r3"
+max_aspect = 1.99
+min_aspect = 0.65
+region = "right_page"
+role = "detail"
+w = 0.4025
+x = 0.5175
+y = 0.5658
+z = 0

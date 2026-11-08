@@ -1,0 +1,51 @@
+custom = false
+family = "panorama"
+gutter_policy = "no_face"
+id = "oto-panorama-x04"
+kind = "spread"
+name = "Panorama + pair"
+orientation = "LLL"
+photo_count = 3
+style = "classic"
+tags = ["crosses-fold"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.52
+id = "p1"
+max_aspect = 6.19
+min_aspect = 2.02
+region = "surface"
+role = "hero"
+w = 0.92
+x = 0.04
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.28
+id = "p2"
+max_aspect = 5.38
+min_aspect = 1.76
+region = "surface"
+role = "detail"
+w = 0.43
+x = 0.04
+y = 0.64
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.28
+id = "p3"
+max_aspect = 5.38
+min_aspect = 1.76
+region = "surface"
+role = "detail"
+w = 0.43
+x = 0.53
+y = 0.64
+z = 0

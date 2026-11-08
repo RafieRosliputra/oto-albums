@@ -1,0 +1,35 @@
+# Example profile — NOT a real lab. A4 portrait layflat.
+schema_version = 1
+id = "generic-portrait-a4-layflat"
+name = "Generic A4 Portrait Layflat (example)"
+country = "MY"
+units = "mm"
+source = "example-only"
+verified_at = "2026-10-25"
+binding = "layflat"
+
+[[sizes]]
+id = "a4-portrait"
+page_width_mm = 210
+page_height_mm = 297
+bleed_mm = 3
+trim_outer_mm = 2
+trim_inside_mm = 0
+safe_mm = 6
+gutter_mm = 0
+min_pages = 20
+max_pages = 60
+page_increment = 2
+
+[color]
+profile = "sRGB"
+pdf_standard = "PDF/X-4"
+dpi = 300
+
+[cover]
+type = "layflat"
+wrap_mm = 15
+hinge_mm = 8
+spine_formula = "pages * paper_caliper_mm / 2 + 2.0"
+paper_caliper_mm = 0.7
+min_spine_mm = 6

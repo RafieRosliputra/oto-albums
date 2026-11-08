@@ -1,0 +1,25 @@
+custom = false
+family = "panorama"
+gutter_policy = "full_bleed"
+id = "oto-panorama-x01"
+kind = "spread"
+name = "Panorama bleed"
+orientation = "L"
+photo_count = 1
+style = "editorial"
+tags = ["crosses-fold"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 1.0
+id = "p1"
+max_aspect = 3.5
+min_aspect = 1.14
+region = "surface"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.0
+z = 0

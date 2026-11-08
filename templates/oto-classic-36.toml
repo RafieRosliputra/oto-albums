@@ -1,0 +1,64 @@
+custom = false
+family = "classic"
+gutter_policy = "safe"
+id = "oto-classic-36"
+kind = "spread"
+name = "Trio + matted"
+orientation = "LLLS"
+photo_count = 4
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.4508
+id = "l1"
+max_aspect = 3.26
+min_aspect = 1.06
+region = "left_page"
+role = "support"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3542
+id = "l2"
+max_aspect = 1.99
+min_aspect = 0.65
+region = "left_page"
+role = "detail"
+w = 0.4025
+x = 0.08
+y = 0.5658
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.3542
+id = "l3"
+max_aspect = 1.99
+min_aspect = 0.65
+region = "left_page"
+role = "detail"
+w = 0.4025
+x = 0.5175
+y = 0.5658
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.84
+id = "r1"
+max_aspect = 1.75
+min_aspect = 0.57
+region = "right_page"
+role = "hero"
+w = 0.84
+x = 0.08
+y = 0.08
+z = 0

@@ -1,0 +1,38 @@
+custom = false
+family = "classic"
+gutter_policy = "safe"
+id = "oto-classic-17"
+kind = "spread"
+name = "Twin landscapes"
+orientation = "LL"
+photo_count = 2
+style = "classic"
+tags = []
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.52
+id = "l1"
+max_aspect = 2.69
+min_aspect = 0.88
+region = "left_page"
+role = "support"
+w = 0.8
+x = 0.1
+y = 0.24
+z = 0
+
+[[frames]]
+allow_rotate = false
+h = 0.52
+id = "r1"
+max_aspect = 2.69
+min_aspect = 0.88
+region = "right_page"
+role = "support"
+w = 0.8
+x = 0.1
+y = 0.24
+z = 0

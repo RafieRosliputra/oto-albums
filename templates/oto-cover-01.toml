@@ -1,0 +1,42 @@
+custom = false
+family = "cover"
+frames = []
+gutter_policy = "full_bleed"
+id = "oto-cover-01"
+kind = "cover"
+name = "Type only"
+orientation = ""
+photo_count = 0
+style = "any"
+tags = ["cover"]
+version = 1
+
+[[texts]]
+h = 0.12
+placeholder = "Aina & Danial"
+preset = "cover_title"
+region = "front"
+rotation_mdeg = 0
+w = 0.76
+x = 0.12
+y = 0.4
+
+[[texts]]
+h = 0.06
+placeholder = "25 · 10 · 2026"
+preset = "cover_subtitle"
+region = "front"
+rotation_mdeg = 0
+w = 0.76
+x = 0.12
+y = 0.54
+
+[[texts]]
+h = 0.7
+placeholder = "AINA & DANIAL"
+preset = "cover_subtitle"
+region = "spine"
+rotation_mdeg = 90000
+w = 1.0
+x = 0.0
+y = 0.15

@@ -1,0 +1,25 @@
+custom = false
+family = "panorama"
+gutter_policy = "no_face"
+id = "oto-panorama-x03"
+kind = "spread"
+name = "Panorama band"
+orientation = "L"
+photo_count = 1
+style = "editorial"
+tags = ["crosses-fold"]
+texts = []
+version = 1
+
+[[frames]]
+allow_rotate = false
+h = 0.64
+id = "p1"
+max_aspect = 5.47
+min_aspect = 1.79
+region = "surface"
+role = "hero"
+w = 1.0
+x = 0.0
+y = 0.18
+z = 0
