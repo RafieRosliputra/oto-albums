@@ -11,6 +11,7 @@ pub mod draw;
 pub mod hub;
 pub mod i18n;
 pub mod inspector;
+pub mod picker;
 pub mod settings;
 pub mod state;
 pub mod textures;
