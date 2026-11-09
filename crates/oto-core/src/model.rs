@@ -3,6 +3,7 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+use crate::designs::{AlbumKind, LayoutParams};
 use crate::geometry::{Rect, Vec2};
 use crate::spec::AlbumSpec;
 use crate::units::MilliDeg;
@@ -648,11 +649,29 @@ pub struct ProjectSettings {
     pub overrides: Vec<PreflightOverride>,
     pub font_pair: String,
     pub style_preset: String,
+    #[serde(default)]
+    pub album_kind: AlbumKind,
+    #[serde(default)]
+    pub layout: LayoutParams,
+    #[serde(default)]
+    pub template_groups: Vec<String>,
+    #[serde(default)]
+    pub template_ids: Vec<String>,
 }
 
 impl Default for ProjectSettings {
     fn default() -> Self {
-        ProjectSettings { autosave_secs: 6, snapshot_minutes: 5, overrides: Vec::new(), font_pair: "Classic Serif".into(), style_preset: "classic".into() }
+        ProjectSettings {
+            autosave_secs: 6,
+            snapshot_minutes: 5,
+            overrides: Vec::new(),
+            font_pair: "Classic Serif".into(),
+            style_preset: "classic".into(),
+            album_kind: AlbumKind::default(),
+            layout: LayoutParams::default(),
+            template_groups: Vec::new(),
+            template_ids: Vec::new(),
+        }
     }
 }
 
@@ -785,5 +804,21 @@ mod tests {
         assert_eq!(Rgba::from_hex("#D95D39"), Some(Rgba::rgb(0xD9, 0x5D, 0x39)));
         assert_eq!(Rgba::rgb(1, 2, 3).to_hex(), "#010203");
         assert_eq!(Rgba::from_hex("zz"), None);
+    }
+
+    #[test]
+    fn project_settings_old_json_loads() {
+        let old = r#"{
+            "autosave_secs": 6,
+            "snapshot_minutes": 5,
+            "overrides": [],
+            "font_pair": "Classic Serif",
+            "style_preset": "classic"
+        }"#;
+        let settings: ProjectSettings = serde_json::from_str(old).unwrap();
+        assert_eq!(settings.album_kind, AlbumKind::Album);
+        assert_eq!(settings.layout, LayoutParams::default());
+        assert!(settings.template_groups.is_empty());
+        assert!(settings.template_ids.is_empty());
     }
 }

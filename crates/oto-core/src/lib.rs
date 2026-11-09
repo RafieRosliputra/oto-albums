@@ -9,6 +9,7 @@ pub mod document;
 pub mod expr;
 pub mod geometry;
 pub mod lab;
+pub mod library;
 pub mod media;
 pub mod model;
 pub mod solver;

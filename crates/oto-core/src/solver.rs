@@ -477,6 +477,29 @@ fn choose_template(ctx: &Ctx, templates: &[Template], cands: &[usize], photos: &
     best
 }
 
+/// How well one template fits these photos (orientation, crop kept, DPI, focus out of the fold, story order),
+/// using the optimal photo→slot assignment. Higher is better; `None` when the photo count differs. Deterministic.
+pub fn score_template_slots(ctx: &Ctx, t: &Template, photos: &[&PhotoInfo]) -> Option<f32> {
+    let params = BuildParams::default();
+    let w = weights(params.style);
+    let slots: Vec<_> = t.photo_frames().collect();
+    let k = photos.len();
+    if slots.len() != k || k == 0 {
+        return None;
+    }
+    let rects: Vec<Rect> = slots.iter().map(|f| f.surface_rect(&ctx.geom)).collect();
+    let evals: Vec<Vec<SlotEval>> =
+        slots.iter().enumerate().map(|(si, f)| photos.iter().map(|p| eval_slot(ctx, &w, p, &rects[si], &f.role, f.min_aspect, f.max_aspect, t.gutter_policy, &params)).collect()).collect();
+    let cost: Vec<Vec<f64>> = evals.iter().map(|row| row.iter().map(|e| -(e.score as f64)).collect()).collect();
+    let assign = hungarian(&cost);
+    let mut total: f32 = assign.iter().enumerate().map(|(s, &p)| evals[s][p].score).sum::<f32>() / k as f32;
+    let mut order: Vec<(f32, usize)> = assign.iter().enumerate().map(|(s, &p)| (rects[s].x + rects[s].y * 0.1, p)).collect();
+    order.sort_by(|a, b| a.0.total_cmp(&b.0));
+    let inversions = order.windows(2).filter(|w| w[0].1 > w[1].1).count();
+    total -= w.seq * inversions as f32 / k as f32;
+    Some(total)
+}
+
 /// Pick the spread count when the user asked for "auto".
 pub fn auto_spread_count(n: usize, spec: &AlbumSpec, style: Style) -> usize {
     let per = match style {
