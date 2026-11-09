@@ -9,6 +9,7 @@ use std::time::{Duration, Instant};
 use crossbeam_channel::Receiver;
 use oto_core::document::{Command, Document, Event};
 use oto_core::lab::LabProfile;
+use oto_core::library;
 use oto_core::media::MediaItem;
 use oto_core::model::{ItemId, MediaId, Project, Spread, SpreadId};
 use oto_core::solver::{Ctx, PhotoInfo};
@@ -203,7 +204,8 @@ pub fn media_index(media: &[MediaItem]) -> HashMap<MediaId, usize> {
 }
 
 impl Workspace {
-    pub fn new(root: PathBuf, project: Project, media: Vec<MediaItem>, store: StoreWorker, lab: Option<LabProfile>, templates: Vec<Template>) -> Self {
+    pub fn new(root: PathBuf, project: Project, media: Vec<MediaItem>, store: StoreWorker, lab: Option<LabProfile>) -> Self {
+        let templates = library::project_templates(&project.spec.geometry(), &project.settings);
         let target = project.spreads.first().map(|s| Target::Spread(s.id)).unwrap_or(Target::Cover);
         let media_idx = media_index(&media);
         let tex = TexCache::new(root.join("cache"));
@@ -267,6 +269,16 @@ impl Workspace {
         }
         ws.refresh_status();
         ws
+    }
+
+    pub fn reload_templates(&mut self) {
+        let templates = {
+            let geom = self.doc.project.spec.geometry();
+            library::project_templates(&geom, &self.doc.project.settings)
+        };
+        self.templates = templates;
+        self.tpl_cache.clear();
+        self.tpl_cache_key = (u64::MAX, None, false);
     }
 
     pub fn project(&self) -> &Project {

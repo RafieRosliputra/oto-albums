@@ -3,13 +3,15 @@
 use std::path::PathBuf;
 
 use egui::{Color32, Pos2, Rect, RichText, Stroke, Ui, Vec2};
+use oto_core::designs::{AlbumKind, LayoutParams};
 use oto_core::lab::LabProfile;
-use oto_core::model::{font_pairs, Project};
+use oto_core::model::{font_pairs, Project, ProjectSettings};
 use oto_core::solver::Style;
 use oto_core::spec::{AlbumSpec, Binding, CoverType};
 use oto_core::units::{Um, Units};
 
 use crate::i18n::t;
+use crate::picker::{self, PickerState};
 use crate::theme;
 
 pub struct Wizard {
@@ -30,6 +32,10 @@ pub struct Wizard {
     pub background: Color32,
     pub border_pt: f32,
     pub gap_pt: f32,
+    pub album_kind: AlbumKind,
+    pub template_groups: Vec<String>,
+    pub template_ids: Vec<String>,
+    pub picker: Option<PickerState>,
 }
 
 pub struct NewProject {
@@ -69,6 +75,10 @@ impl Wizard {
             background: Color32::WHITE,
             border_pt: 0.0,
             gap_pt: 4.0,
+            album_kind: AlbumKind::Album,
+            template_groups: Vec::new(),
+            template_ids: Vec::new(),
+            picker: None,
         }
     }
 
@@ -209,7 +219,30 @@ impl Wizard {
                         ui.vertical(|ui| {
                             diagram(ui, &self.spec, &pal);
                             ui.separator();
-                            self.template_library(ui, &pal);
+                            ui.label(RichText::new(t("Album type")).font(theme::strong_font(14.0)));
+                            ui.horizontal(|ui| {
+                                ui.radio_value(&mut self.album_kind, AlbumKind::Album, t("Photo album"));
+                                ui.radio_value(&mut self.album_kind, AlbumKind::Photobook, t("Photobook"));
+                            });
+                            let desc = if self.album_kind == AlbumKind::Album {
+                                t("Printed as full spreads; photos may cross the centre.")
+                            } else {
+                                t("Bound book with a centre fold; photos stay clear of it.")
+                            };
+                            ui.label(RichText::new(desc).small().color(pal.muted));
+                            ui.add_space(4.0);
+                            ui.horizontal(|ui| {
+                                ui.label(format!("{}: {} · {}: {}", t("Groups"), self.template_groups.len(), t("Templates"), self.template_ids.len()));
+                                if ui.button(t("Choose templates…")).clicked() {
+                                    let settings = ProjectSettings {
+                                        album_kind: self.album_kind,
+                                        template_groups: self.template_groups.clone(),
+                                        template_ids: self.template_ids.clone(),
+                                        ..Default::default()
+                                    };
+                                    self.picker = Some(PickerState::open_with(&settings));
+                                }
+                            });
                         });
                     });
                 });
@@ -242,10 +275,23 @@ impl Wizard {
                         p.lab_size_id = lab.as_ref().map(|_| self.size_id.clone());
                         p.settings.style_preset = self.style.key().into();
                         p.settings.font_pair = self.font_pair.clone();
+                        p.settings.album_kind = self.album_kind;
+                        p.settings.template_groups = self.template_groups.clone();
+                        p.settings.template_ids = self.template_ids.clone();
                         out = WizardOutcome::Create(Box::new(NewProject { root: self.root(), project: p, lab }));
                     }
                 });
             });
+        if let Some(st) = &mut self.picker {
+            let geom = self.spec.geometry();
+            let layout = LayoutParams::default();
+            if let Some((kind, groups, ids)) = picker::show(ctx, st, &geom, &layout) {
+                self.album_kind = kind;
+                self.template_groups = groups;
+                self.template_ids = ids;
+                self.picker = None;
+            }
+        }
         if !open {
             out = WizardOutcome::Cancel;
         }
