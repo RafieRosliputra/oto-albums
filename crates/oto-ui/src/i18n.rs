@@ -63,7 +63,6 @@ const MS: &[(&str, &str)] = &[
     ("Printed as full spreads; photos may cross the centre.", "Dicetak sebagai spread penuh; gambar boleh merentas tengah."),
     ("Bound book with a centre fold; photos stay clear of it.", "Buku berjilid dengan lipatan tengah; gambar dijauhkan darinya."),
     ("Groups", "Kumpulan"),
-    ("Templates", "Templat"),
     ("Theme", "Tema"),
     ("Dark", "Gelap"),
     ("Light", "Cerah"),
