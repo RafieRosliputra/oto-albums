@@ -1217,6 +1217,7 @@ pub enum Cmd {
     LangMs,
     Sample,
     Consolidate,
+    ChooseTemplates,
 }
 
 pub fn commands() -> Vec<(Cmd, &'static str, &'static str)> {
@@ -1242,6 +1243,7 @@ pub fn commands() -> Vec<(Cmd, &'static str, &'static str)> {
         (Cmd::DeleteSpread, "Delete spread", ""),
         (Cmd::LockSpread, "Lock spread", ""),
         (Cmd::Cover, "Edit cover", ""),
+        (Cmd::ChooseTemplates, "Choose templates", ""),
         (Cmd::SaveTemplate, "Save as template", ""),
         (Cmd::ToggleLeft, "Toggle book map", "⌘1"),
         (Cmd::ToggleRight, "Toggle inspector", "⌘2"),

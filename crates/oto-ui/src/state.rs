@@ -153,6 +153,10 @@ pub struct Workspace {
     pub tex: TexCache,
     pub lab: Option<LabProfile>,
     pub templates: Vec<Template>,
+    /// Templates saved in the project or by the user; always offered on top of the library.
+    pub extra_templates: Vec<Template>,
+    /// Settings/spec fingerprint the current template list was built for.
+    templates_key: String,
     pub target: Target,
     pub view: ViewState,
     pub sel: Vec<ItemId>,
@@ -203,9 +207,19 @@ pub fn media_index(media: &[MediaItem]) -> HashMap<MediaId, usize> {
     media.iter().enumerate().map(|(i, m)| (m.id, i)).collect()
 }
 
+/// Library templates plus project/user templates (ids not already present).
+fn merge_templates(mut base: Vec<Template>, extra: &[Template]) -> Vec<Template> {
+    for t in extra {
+        if !base.iter().any(|x| x.id == t.id) {
+            base.push(t.clone());
+        }
+    }
+    base
+}
+
 impl Workspace {
-    pub fn new(root: PathBuf, project: Project, media: Vec<MediaItem>, store: StoreWorker, lab: Option<LabProfile>) -> Self {
-        let templates = library::project_templates(&project.spec.geometry(), &project.settings);
+    pub fn new(root: PathBuf, project: Project, media: Vec<MediaItem>, store: StoreWorker, lab: Option<LabProfile>, extra_templates: Vec<Template>) -> Self {
+        let templates = merge_templates(library::project_templates(&project.spec.geometry(), &project.settings), &extra_templates);
         let target = project.spreads.first().map(|s| Target::Spread(s.id)).unwrap_or(Target::Cover);
         let media_idx = media_index(&media);
         let tex = TexCache::new(root.join("cache"));
@@ -219,6 +233,8 @@ impl Workspace {
             tex,
             lab,
             templates,
+            extra_templates,
+            templates_key: String::new(),
             target,
             view: ViewState { zoom: 1.0, pan: egui::Vec2::ZERO, fit_pending: true, continuous: false, compare: false, user_moved: false, last_area: egui::Vec2::ZERO },
             sel: Vec::new(),
@@ -274,7 +290,7 @@ impl Workspace {
     pub fn reload_templates(&mut self) {
         let templates = {
             let geom = self.doc.project.spec.geometry();
-            library::project_templates(&geom, &self.doc.project.settings)
+            merge_templates(library::project_templates(&geom, &self.doc.project.settings), &self.extra_templates)
         };
         self.templates = templates;
         self.tpl_cache.clear();
@@ -384,6 +400,18 @@ impl Workspace {
         self.edited = true;
         self.last_change = Instant::now();
         self.ensure_target();
+        self.sync_templates();
+    }
+
+    /// Rebuild the template list when album kind, template selection, spacing or album size changed
+    /// (also after undo/redo of those edits).
+    pub fn sync_templates(&mut self) {
+        let p = &self.doc.project;
+        let key = format!("{:?}|{:?}|{:?}|{:?}|{}x{}", p.settings.album_kind, p.settings.template_groups, p.settings.template_ids, p.settings.layout, p.spec.page_width_um, p.spec.page_height_um);
+        if key != self.templates_key {
+            self.templates_key = key;
+            self.reload_templates();
+        }
     }
 
     /// Replace the current surface (spread or cover) with an edited copy.

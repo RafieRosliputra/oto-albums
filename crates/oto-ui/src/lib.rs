@@ -48,6 +48,8 @@ pub struct OtoApp {
     lab_note: String,
     ws: Option<Workspace>,
     wizard: Option<wizard::Wizard>,
+    /// Template picker for the open project.
+    picker: Option<picker::PickerState>,
     hub_search: String,
     toasts: Vec<Toast>,
     auto_build: Option<AutoBuildDlg>,
@@ -97,6 +99,7 @@ impl OtoApp {
             export: None,
             proof: None,
             snapshots_open: false,
+            picker: None,
             snapshot_confirm: None,
             relink: None,
             meta: None,
@@ -160,7 +163,7 @@ impl OtoApp {
         };
         let lab =
             project.lab_id.as_ref().and_then(|id| self.labs.iter().find(|l| &l.id == id).cloned().or_else(|| pkg.lab_profile_toml(id).ok().flatten().and_then(|s| LabProfile::from_toml(&s).ok())));
-        let mut templates = oto_core::builtin::all_templates();
+        let mut templates: Vec<Template> = Vec::new();
         for s in pkg.templates().unwrap_or_default() {
             if let Ok(t) = Template::from_toml(&s) {
                 if !templates.iter().any(|x| x.id == t.id) {
@@ -321,6 +324,11 @@ impl OtoApp {
             Cmd::New => self.wizard = Some(wizard::Wizard::new(&self.labs, oto_platform::native().documents_dir())),
             Cmd::Open => self.open_dialog(),
             Cmd::Sample => self.open_sample(),
+            Cmd::ChooseTemplates => {
+                if let Some(ws) = &self.ws {
+                    self.picker = Some(picker::PickerState::open_with(&ws.project().settings));
+                }
+            }
             Cmd::Settings => self.settings_open = true,
             Cmd::Shortcuts => self.shortcuts_open = true,
             Cmd::LangEn | Cmd::LangMs => {
@@ -649,6 +657,9 @@ impl OtoApp {
                 }
                 if ui.button(t("Auto Build…")).on_hover_text("⌘B").clicked() {
                     ws.requests.push(Request::AutoBuild { from: None });
+                }
+                if ui.button(t("Templates…")).on_hover_text(t("Choose which templates this album uses")).clicked() {
+                    cmd = Some(Cmd::ChooseTemplates);
                 }
                 if ws.project().cover.is_some() || ws.project().spec.cover_type != oto_core::spec::CoverType::None {
                     let on_cover = ws.target == Target::Cover;
@@ -1017,6 +1028,21 @@ impl eframe::App for OtoApp {
                     self.wizard = None;
                     self.create_project(*np);
                 }
+            }
+        }
+        if let (Some(st), Some(ws)) = (&mut self.picker, &mut self.ws) {
+            let geom = ws.project().spec.geometry();
+            let layout = ws.project().settings.layout;
+            if let Some((kind, groups, ids)) = picker::show(ctx, st, &geom, &layout) {
+                let mut ps = ws.project().settings.clone();
+                ps.album_kind = kind;
+                ps.template_groups = groups;
+                ps.template_ids = ids;
+                ws.exec(oto_core::document::Command::SetProjectSettings { settings: ps });
+                ws.msg(format!("{} templates available", ws.templates.iter().filter(|t| t.kind == oto_core::template::TemplateKind::Spread).count()), MsgKind::Ok);
+                self.picker = None;
+            } else if !st.is_open() {
+                self.picker = None;
             }
         }
         self.dialogs_ui(ctx);

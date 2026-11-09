@@ -234,12 +234,8 @@ impl Wizard {
                             ui.horizontal(|ui| {
                                 ui.label(format!("{}: {} · {}: {}", t("Groups"), self.template_groups.len(), t("Templates"), self.template_ids.len()));
                                 if ui.button(t("Choose templates…")).clicked() {
-                                    let settings = ProjectSettings {
-                                        album_kind: self.album_kind,
-                                        template_groups: self.template_groups.clone(),
-                                        template_ids: self.template_ids.clone(),
-                                        ..Default::default()
-                                    };
+                                    let settings =
+                                        ProjectSettings { album_kind: self.album_kind, template_groups: self.template_groups.clone(), template_ids: self.template_ids.clone(), ..Default::default() };
                                     self.picker = Some(PickerState::open_with(&settings));
                                 }
                             });
@@ -296,81 +292,6 @@ impl Wizard {
             out = WizardOutcome::Cancel;
         }
         out
-    }
-}
-
-impl Wizard {
-    /// Template library + appearance, mirroring the reference product's New Project step:
-    /// a filter, a grid of slot diagrams, then background / border / gap.
-    fn template_library(&mut self, ui: &mut Ui, pal: &theme::Palette) {
-        ui.label(RichText::new(t("Template library")).font(theme::strong_font(14.0)));
-        let mut filter = self.template_filter.clone();
-        egui::ComboBox::from_id_salt("wiz-tpl-filter").selected_text(filter.clone()).width(240.0).show_ui(ui, |ui| {
-            for f in ["All templates", "1 photo", "2 photos", "3 photos", "4 photos", "5+ photos"] {
-                ui.selectable_value(&mut filter, f.to_string(), f);
-            }
-        });
-        self.template_filter = filter.clone();
-        let exact: Option<u32> = match filter.as_str() {
-            "1 photo" => Some(1),
-            "2 photos" => Some(2),
-            "3 photos" => Some(3),
-            "4 photos" => Some(4),
-            _ => None,
-        };
-        let many = filter == "5+ photos";
-        ui.add_space(4.0);
-        let mut toggles: Vec<(String, bool)> = Vec::new();
-        egui::ScrollArea::vertical().id_salt("wiz-tpl-scroll").max_height(140.0).auto_shrink([false, true]).show(ui, |ui| {
-            ui.horizontal_wrapped(|ui| {
-                for tpl in &self.templates {
-                    if let Some(n) = exact {
-                        if tpl.photo_count != n {
-                            continue;
-                        }
-                    }
-                    if many && tpl.photo_count < 5 {
-                        continue;
-                    }
-                    let on = self.enabled_templates.contains(&tpl.id);
-                    let (rect, resp) = ui.allocate_exact_size(Vec2::new(96.0, 66.0), egui::Sense::click());
-                    let p = ui.painter_at(rect);
-                    p.rect_filled(rect, 3.0, if on { Color32::WHITE } else { Color32::from_gray(242) });
-                    p.rect_stroke(rect, 3.0, Stroke::new(1.0_f32, if on { pal.accent } else { pal.border }), egui::StrokeKind::Inside);
-                    let inner = rect.shrink(5.0);
-                    for f in &tpl.frames {
-                        let mut fx = f.x;
-                        if matches!(f.region, oto_core::template::Region::RightPage | oto_core::template::Region::Front) {
-                            fx += 0.5;
-                        }
-                        let r = Rect::from_min_size(Pos2::new(inner.min.x + fx * inner.width(), inner.min.y + f.y * inner.height()), Vec2::new(f.w * inner.width(), f.h * inner.height()));
-                        p.rect_filled(r, 1.0, if on { Color32::from_rgb(0x6E, 0xD3, 0xE8) } else { Color32::from_gray(206) });
-                    }
-                    if resp.clicked() {
-                        toggles.push((tpl.id.clone(), !on));
-                    }
-                }
-            });
-        });
-        for (id, on) in toggles {
-            if on {
-                self.enabled_templates.insert(id);
-            } else {
-                self.enabled_templates.remove(&id);
-            }
-        }
-        ui.add_space(6.0);
-        ui.label(RichText::new(t("Appearance")).font(theme::strong_font(14.0)));
-        ui.horizontal(|ui| {
-            ui.label(t("Background color"));
-            ui.color_edit_button_srgba(&mut self.background);
-            ui.add_space(14.0);
-            ui.label(t("Border around images"));
-            ui.add(egui::DragValue::new(&mut self.border_pt).range(0.0..=20.0).suffix(" pt"));
-            ui.add_space(14.0);
-            ui.label(t("Gap between images"));
-            ui.add(egui::DragValue::new(&mut self.gap_pt).range(0.0..=40.0).suffix(" pt"));
-        });
     }
 }
 
