@@ -18,7 +18,7 @@ pub const BINS: [&str; 5] = ["Preparation", "Ceremony", "Portraits", "Reception"
 
 pub fn bottom(ui: &mut Ui, ws: &mut Workspace, settings: &mut AppSettings) {
     ui.horizontal(|ui| {
-        for (tab, label) in [(BottomTab::Timeline, t("Timeline")), (BottomTab::Photos, t("Photos")), (BottomTab::Templates, t("Templates"))] {
+        for (tab, label) in [(BottomTab::Timeline, t("Timeline")), (BottomTab::Photos, t("Photos")), (BottomTab::Templates, t("Templates")), (BottomTab::Patterns, t("Patterns"))] {
             let n = match tab {
                 BottomTab::Photos => format!(" ({})", ws.media.len()),
                 _ => String::new(),
@@ -41,6 +41,7 @@ pub fn bottom(ui: &mut Ui, ws: &mut Workspace, settings: &mut AppSettings) {
         BottomTab::Timeline => timeline(ui, ws, settings),
         BottomTab::Photos => photos(ui, ws, settings),
         BottomTab::Templates => templates(ui, ws, settings),
+        BottomTab::Patterns => patterns(ui, ws),
     }
 }
 
@@ -182,6 +183,7 @@ fn photos(ui: &mut Ui, ws: &mut Workspace, settings: &mut AppSettings) {
     let mut clicked: Option<(usize, bool, bool)> = None;
     let mut drag_start: Option<usize> = None;
     let mut hovered_idx: Option<usize> = None;
+    let mut hover_id = None;
     let mut ctx_action: Option<(usize, MediaAction)> = None;
     egui::ScrollArea::vertical().auto_shrink([false, false]).show_rows(ui, cell + 14.0, rows, |ui, range| {
         for row in range {
@@ -225,6 +227,7 @@ fn photos(ui: &mut Ui, ws: &mut Workspace, settings: &mut AppSettings) {
                     let resp = resp.on_hover_text(media_tip(&m, used));
                     if resp.hovered() {
                         hovered_idx = Some(k);
+                        hover_id = Some(m.id);
                     }
                     if resp.clicked() {
                         let mods = ui.input(|i| i.modifiers);
@@ -301,6 +304,9 @@ fn photos(ui: &mut Ui, ws: &mut Workspace, settings: &mut AppSettings) {
         let id = ws.media[list[k]].id;
         let ids = if ws.media_sel.contains(&id) { ws.media_sel.clone() } else { vec![id] };
         ws.drag_media = Some(ids);
+    }
+    if hover_id.is_some() {
+        ws.hover_media = hover_id;
     }
     // Keyboard rating while hovering the grid.
     if let Some(k) = hovered_idx {
@@ -851,5 +857,44 @@ fn templates(ui: &mut Ui, ws: &mut Workspace, settings: &AppSettings) {
         }
     } else if !ws.view.compare {
         ws.preview = None;
+    }
+}
+
+/// Pattern swatches: the formal collection first. Click = apply to the current spread; drag onto the spread.
+fn patterns(ui: &mut Ui, ws: &mut Workspace) {
+    use oto_core::model::{Pattern, PatternKind};
+    ui.label(egui::RichText::new(t("Click a pattern to use it as this spread's background, or drag it onto the spread. Opacity, size and colour are in the inspector.")).small().weak());
+    let kinds: Vec<PatternKind> = PatternKind::FORMAL.into_iter().chain(PatternKind::ALL.into_iter().filter(|k| !PatternKind::FORMAL.contains(k))).collect();
+    let mut apply = None;
+    egui::ScrollArea::horizontal().show(ui, |ui| {
+        ui.horizontal(|ui| {
+            for k in kinds {
+                ui.vertical(|ui| {
+                    let size = 76.0;
+                    let (r, resp) = ui.allocate_exact_size(Vec2::splat(size), egui::Sense::click_and_drag());
+                    let mut p = Pattern::new(k);
+                    p.opacity = 1.0;
+                    p.color = oto_core::model::Rgba::rgb(0x9C, 0x8D, 0x78);
+                    let ppm = 3.0;
+                    let tex = ws.tex.pattern(ui.ctx(), &p, ppm);
+                    let reps = size / (p.scale_mm * ppm).max(1.0);
+                    let painter = ui.painter();
+                    painter.rect_filled(r, 4.0, Color32::WHITE);
+                    painter.image(tex, r, Rect::from_min_max(Pos2::ZERO, Pos2::new(reps, reps)), Color32::WHITE);
+                    let hl = if resp.hovered() { ui.visuals().strong_text_color() } else { Color32::from_gray(120) };
+                    painter.rect_stroke(r, 4.0, Stroke::new(1.0_f32, hl), egui::StrokeKind::Outside);
+                    ui.label(egui::RichText::new(k.label()).small());
+                    if resp.clicked() {
+                        apply = Some(k);
+                    }
+                    if resp.drag_started() {
+                        ws.drag_pattern = Some(k);
+                    }
+                });
+            }
+        });
+    });
+    if let Some(k) = apply {
+        ws.set_pattern(k);
     }
 }

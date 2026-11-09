@@ -146,3 +146,12 @@ pub fn native() -> Box<dyn Platform> {
 pub fn app_data_dir() -> PathBuf {
     directories::ProjectDirs::from("com", "JohorStudio", "oto-albums").map(|p| p.data_dir().to_path_buf()).unwrap_or_else(|| std::env::temp_dir().join("oto-albums"))
 }
+
+/// macOS Quick Look for one file (like pressing Space in Finder). Returns the child process so the
+/// caller can close the preview again; `None` on other systems or when it cannot start.
+pub fn quick_look(path: &std::path::Path) -> Option<std::process::Child> {
+    if !cfg!(target_os = "macos") || !path.exists() {
+        return None;
+    }
+    std::process::Command::new("qlmanage").arg("-p").arg(path).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null()).spawn().ok()
+}

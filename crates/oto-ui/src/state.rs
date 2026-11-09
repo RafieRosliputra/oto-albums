@@ -67,6 +67,7 @@ pub enum BottomTab {
     Timeline,
     Photos,
     Templates,
+    Patterns,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -160,6 +161,18 @@ pub struct Workspace {
     pub target: Target,
     pub view: ViewState,
     pub sel: Vec<ItemId>,
+    /// Layout animation of the current spread.
+    pub anim: crate::anim::Anim,
+    /// Mirrors AppSettings.reduced_motion (set every frame).
+    pub reduced_motion: bool,
+    /// Photo under the pointer (strip or spread), for Quick Look.
+    pub hover_media: Option<MediaId>,
+    /// Pattern being dragged from the Patterns tab onto the spread.
+    pub drag_pattern: Option<oto_core::model::PatternKind>,
+    /// Space was used to pan the canvas while held (then releasing it must not open Quick Look).
+    pub space_panned: bool,
+    /// Running macOS Quick Look preview.
+    pub quick_look: Option<std::process::Child>,
     pub tool: Tool,
     pub crop_mode: Option<ItemId>,
     pub preview: Option<Spread>,
@@ -238,6 +251,12 @@ impl Workspace {
             target,
             view: ViewState { zoom: 1.0, pan: egui::Vec2::ZERO, fit_pending: true, continuous: false, compare: false, user_moved: false, last_area: egui::Vec2::ZERO },
             sel: Vec::new(),
+            anim: Default::default(),
+            reduced_motion: false,
+            hover_media: None,
+            drag_pattern: None,
+            space_panned: false,
+            quick_look: None,
             tool: Tool::Select,
             crop_mode: None,
             preview: None,
@@ -285,6 +304,132 @@ impl Workspace {
         }
         ws.refresh_status();
         ws
+    }
+
+    // ----- Template variations & automatic layout (SmartAlbums-style "design follows the photos") -----
+
+    fn spread_infos(&self, s: &Spread) -> Vec<PhotoInfo> {
+        s.frames.iter().filter_map(|f| f.image_id).filter_map(|id| self.photo_info(id)).collect()
+    }
+
+    /// Templates for this spread's photos, best first (indices into `self.templates`).
+    pub fn ranked_templates(&self, s: &Spread) -> Vec<usize> {
+        let infos = self.spread_infos(s);
+        if infos.is_empty() {
+            return Vec::new();
+        }
+        let refs: Vec<&PhotoInfo> = infos.iter().collect();
+        oto_core::library::rank_templates(&self.ctx(), &refs, &self.templates).into_iter().map(|(i, _)| i).collect()
+    }
+
+    /// Lay `s` (with whatever photos its frames hold) onto template `ti` and commit, animating the change.
+    pub fn relayout_onto(&mut self, s: Spread, ti: usize, label: &str) -> bool {
+        let Some(t) = self.templates.get(ti).cloned() else { return false };
+        let ctx = self.ctx();
+        let mut laid = {
+            let lookup = |id: MediaId| self.photo_info(id);
+            oto_core::library::layout_with(&ctx, &s, &t, &lookup)
+        };
+        laid.id = s.id;
+        laid.locked = s.locked;
+        if let Some(before) = self.current().cloned() {
+            let enabled = !self.reduced_motion;
+            self.anim.begin(&before, enabled);
+        }
+        self.commit(laid, label)
+    }
+
+    /// Re-lay a spread onto the best template for its photos (used after adding or removing photos).
+    pub fn relayout_best(&mut self, s: Spread, label: &str) -> bool {
+        if s.locked || !matches!(self.target, Target::Spread(_)) {
+            return self.commit(s, label);
+        }
+        match self.ranked_templates(&s).first().copied() {
+            Some(ti) => self.relayout_onto(s, ti, label),
+            None => self.commit(s, label),
+        }
+    }
+
+    /// Re-lay every unlocked spread onto its own template (after spacing changes). One undo step.
+    pub fn relayout_all(&mut self, label: &str) -> usize {
+        let ctx = self.ctx();
+        let mut n = 0;
+        let spreads: Vec<Spread> = self
+            .doc
+            .project
+            .spreads
+            .iter()
+            .map(|s| {
+                if s.locked {
+                    return s.clone();
+                }
+                match self.templates.iter().find(|t| t.id == s.template_id) {
+                    Some(t) => {
+                        let lookup = |id: MediaId| self.photo_info(id);
+                        let mut laid = oto_core::library::layout_with(&ctx, s, t, &lookup);
+                        laid.id = s.id;
+                        n += 1;
+                        laid
+                    }
+                    None => s.clone(),
+                }
+            })
+            .collect();
+        if n > 0 {
+            self.exec(Command::SetSpreads { spreads, label: label.to_string() });
+        }
+        n
+    }
+
+    /// Up/Down: step through the designs for this many photos, best first.
+    pub fn variation(&mut self, step: i32) {
+        if !matches!(self.target, Target::Spread(_)) {
+            return;
+        }
+        let Some(cur) = self.current().cloned() else { return };
+        if cur.locked {
+            self.msg("This spread is locked.", MsgKind::Warn);
+            return;
+        }
+        let ranked = self.ranked_templates(&cur);
+        if ranked.is_empty() {
+            return;
+        }
+        let n = ranked.len() as i32;
+        let pos = ranked.iter().position(|&i| self.templates[i].id == cur.template_id);
+        let next = match pos {
+            Some(p) => (p as i32 + step).rem_euclid(n),
+            None if step >= 0 => 0,
+            None => n - 1,
+        } as usize;
+        if self.relayout_onto(cur, ranked[next], "Change design") {
+            let name = self.templates[ranked[next]].name.clone();
+            self.msg(format!("Design {} of {} · {name}", next + 1, n), MsgKind::Info);
+        }
+    }
+
+    /// Put a background pattern on the current spread (keeps the colour/opacity already chosen).
+    pub fn set_pattern(&mut self, k: oto_core::model::PatternKind) {
+        let Some(mut s) = self.current().cloned() else { return };
+        let mut p = oto_core::model::Pattern::new(k);
+        if let Some(old) = s.background.pattern {
+            p.color = old.color;
+            p.opacity = old.opacity;
+        }
+        s.background.pattern = Some(p);
+        self.commit(s, "Pattern");
+    }
+
+    /// Space: open or close macOS Quick Look for a photo.
+    pub fn toggle_quick_look(&mut self, id: Option<MediaId>) {
+        if let Some(mut child) = self.quick_look.take() {
+            let _ = child.kill();
+            let _ = child.wait();
+            return;
+        }
+        let Some(m) = id.and_then(|id| self.media(id)) else { return };
+        let path = std::path::PathBuf::from(&m.path);
+        self.quick_look = oto_platform::quick_look(&path);
     }
 
     pub fn reload_templates(&mut self) {
@@ -365,6 +510,19 @@ impl Workspace {
             self.sel.clear();
             self.crop_mode = None;
         }
+    }
+
+    /// Left/Right (and ⌘←/⌘→): previous / next spread.
+    pub fn step_spread(&mut self, step: i32) {
+        let ids: Vec<_> = self.project().spreads.iter().map(|s| s.id).collect();
+        if ids.is_empty() {
+            return;
+        }
+        let j = match self.spread_index() {
+            Some(i) => (i as i32 + step).clamp(0, ids.len() as i32 - 1) as usize,
+            None => 0,
+        };
+        self.go_to(Target::Spread(ids[j]));
     }
 
     pub fn go_to(&mut self, t: Target) {

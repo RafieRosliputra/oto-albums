@@ -1,4 +1,4 @@
-# Status — v0.1.0 (9 Nov 2026)
+# Status — v0.2.0 (9 Nov 2026)
 
 Target platform for this release: **macOS, Apple Silicon**. Built and tested there only.
 
@@ -17,10 +17,11 @@ Target platform for this release: **macOS, Apple Silicon**. Built and tested the
 - Autosave, periodic snapshots, crash detection and recovery, clean save on ⌘Q or a system quit
 - English UI with a Bahasa Melayu switch, high-contrast theme, UI scale, AccessKit
 - `oto-cli` for preflight, export, proof, validate, sample, fixtures, synth, templates, bench and golden
-- **New in this version:** the Clean template generator (`oto-core/src/clean.rs`), see docs/TEMPLATE-STYLE.md
+- v0.2: photo album / photobook types, 200+ designed templates (`oto-core/src/designs.rs`), template picker, auto-design on drop/remove, ↑↓ designs, ←→ spreads, Return/double-click photo edit, Space Quick Look, layout animation, 22 formal patterns + pastel inks, spacing settings — see CHANGELOG.md
 
 ## Not done / known issues
-- Clean templates are not wired into the UI yet (Templates strip, Auto Build), and there is no "Flip spread", "Apply template to all spreads" or template filter yet
+- No "Flip spread" or "Apply template to all spreads" commands yet; the older Clean generator (`clean.rs`) is kept but not listed in the picker
+- Animation covers design changes made by the keyboard and by adding/removing photos; template clicks in the Templates strip are not animated
 - Bahasa Melayu translation is partial: untranslated strings fall back to English
 - Auto Build raises the photos-per-spread maximum instead of dropping photos (it warns in the dialog)
 - PDF/X-4 is checked by oto-albums itself (lopdf and qpdf: 0 problems). It is **not** certified by veraPDF or Acrobat

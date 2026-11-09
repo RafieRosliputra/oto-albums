@@ -100,7 +100,8 @@ fn spread_tab(ui: &mut Ui, ws: &mut Workspace, settings: &AppSettings) {
     let mut kind = s.background.pattern.map(|p| p.kind);
     egui::ComboBox::from_id_salt("pattern-kind").selected_text(kind.map(|k| k.label()).unwrap_or(t("None"))).show_ui(ui, |ui| {
         changed |= ui.selectable_value(&mut kind, None, t("None")).changed();
-        for k in PatternKind::ALL {
+        // The formal collection first, then the playful ones.
+        for k in PatternKind::FORMAL.into_iter().chain(PatternKind::ALL.into_iter().filter(|k| !PatternKind::FORMAL.contains(k))) {
             changed |= ui.selectable_value(&mut kind, Some(k), k.label()).changed();
         }
     });
@@ -117,8 +118,23 @@ fn spread_tab(ui: &mut Ui, ws: &mut Workspace, settings: &AppSettings) {
             changed = true;
         }
         changed |= ui.add(egui::Slider::new(&mut p.opacity, 0.05..=1.0).text(t("Opacity"))).changed();
-        ui.horizontal(|ui| {
+        ui.horizontal_wrapped(|ui| {
             ui.label(t("Color"));
+            for (name, c) in oto_core::model::PASTELS {
+                let (r, resp) = ui.allocate_exact_size(egui::vec2(18.0, 18.0), egui::Sense::click());
+                ui.painter().rect_filled(r, 9.0, egui::Color32::from_rgb(c.r, c.g, c.b));
+                let on = p.color.r == c.r && p.color.g == c.g && p.color.b == c.b;
+                ui.painter().rect_stroke(
+                    r,
+                    9.0,
+                    egui::Stroke::new(if on { 2.0_f32 } else { 1.0_f32 }, if on { ui.visuals().strong_text_color() } else { egui::Color32::from_gray(150) }),
+                    egui::StrokeKind::Outside,
+                );
+                if resp.on_hover_text(name).clicked() {
+                    p.color = c;
+                    changed = true;
+                }
+            }
             changed |= rgba_edit(ui, &mut p.color);
         });
     }

@@ -3,6 +3,7 @@
 // Render and layout helpers take many plain geometric parameters by design (see DECISIONS.md).
 #![allow(clippy::too_many_arguments, clippy::type_complexity)]
 
+pub mod anim;
 pub mod bookmap;
 pub mod bottom;
 pub mod canvas;
@@ -436,7 +437,7 @@ impl OtoApp {
                     self.snapshots_open = true;
                 }
                 Request::Relink => self.relink = Some(RelinkDlg { open: true, rx: None, matches: vec![], choice: Default::default() }),
-                Request::AlbumSettings => self.spec = Some(SpecDlg { open: true, spec: ws.project().spec.clone(), icc_err: None }),
+                Request::AlbumSettings => self.spec = Some(SpecDlg { open: true, spec: ws.project().spec.clone(), icc_err: None, layout: ws.project().settings.layout }),
                 Request::ProjectInfo => {
                     let p = ws.project();
                     self.meta = Some(MetaDlg { open: true, name: p.name.clone(), client: p.client.clone(), due: p.due_date.clone().unwrap_or_default(), status: p.status });
@@ -567,13 +568,7 @@ impl OtoApp {
                     step_template(ws, if w { 1 } else { -1 }, true);
                 }
                 if prev || next {
-                    let ids: Vec<_> = ws.project().spreads.iter().map(|s| s.id).collect();
-                    if let Some(i) = ws.spread_index() {
-                        let j = if next { (i + 1).min(ids.len().saturating_sub(1)) } else { i.saturating_sub(1) };
-                        ws.go_to(Target::Spread(ids[j]));
-                    } else if let Some(first) = ids.first() {
-                        ws.go_to(Target::Spread(*first));
-                    }
+                    ws.step_spread(if next { 1 } else { -1 });
                 }
                 canvas::keys(ctx, ws);
             }
@@ -966,6 +961,8 @@ impl eframe::App for OtoApp {
         // Background work.
         self.poll_import(ctx);
         if let Some(ws) = &mut self.ws {
+            ws.reduced_motion = self.settings.reduced_motion;
+            ws.hover_media = None;
             ws.tick();
             if ws.tex.poll(ctx) || ws.tex.has_pending() || ws.export.is_some() {
                 ctx.request_repaint_after(Duration::from_millis(30));

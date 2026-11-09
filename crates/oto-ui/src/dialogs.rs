@@ -1031,6 +1031,8 @@ pub struct SpecDlg {
     pub open: bool,
     pub spec: AlbumSpec,
     pub icc_err: Option<String>,
+    /// Spacing used by the designed templates (gap, margins, photobook fold allowance).
+    pub layout: oto_core::designs::LayoutParams,
 }
 
 pub fn album_settings(ctx: &egui::Context, ws: &mut Workspace, dlg: &mut SpecDlg) {
@@ -1062,6 +1064,12 @@ pub fn album_settings(ctx: &egui::Context, ws: &mut Workspace, dlg: &mut SpecDlg
         if let Some(e) = &dlg.icc_err {
             ui.label(RichText::new(e).color(theme::AMBER));
         }
+        ui.separator();
+        ui.label(RichText::new(t("Spacing")).strong());
+        ui.add(egui::Slider::new(&mut dlg.layout.gap_mm, 0.0..=15.0).step_by(0.5).text(t("Gap between photos (mm)")));
+        ui.add(egui::Slider::new(&mut dlg.layout.margin_pct, 0.0..=20.0).step_by(0.5).text(t("Page margin (%)")));
+        ui.add(egui::Slider::new(&mut dlg.layout.book_gutter_mm, 0.0..=15.0).step_by(0.5).text(t("Photobook fold allowance (mm)")));
+        ui.label(RichText::new(t("A small gap (about 3 mm) makes photos read as one calm block. Unlocked spreads are re-laid on Apply.")).small().weak());
         let issues = dlg.spec.validate();
         for i in &issues {
             ui.label(RichText::new(format!("⚠ {}", i.message)).color(theme::AMBER));
@@ -1073,7 +1081,22 @@ pub fn album_settings(ctx: &egui::Context, ws: &mut Workspace, dlg: &mut SpecDlg
     });
     if apply {
         dlg.spec.normalize();
-        if ws.exec(Command::SetSpec { spec: dlg.spec.clone() }) {
+        let spec_changed = dlg.spec != ws.project().spec;
+        let layout_changed = dlg.layout != ws.project().settings.layout;
+        let mut ok = true;
+        if spec_changed {
+            ok = ws.exec(Command::SetSpec { spec: dlg.spec.clone() });
+        }
+        if ok && layout_changed {
+            let mut ps = ws.project().settings.clone();
+            ps.layout = dlg.layout;
+            ok = ws.exec(Command::SetProjectSettings { settings: ps });
+            if ok {
+                let n = ws.relayout_all("Change spacing");
+                ws.msg(format!("Spacing updated on {n} spread(s)."), MsgKind::Ok);
+            }
+        }
+        if ok {
             ws.view.fit_pending = true;
             open = false;
         }

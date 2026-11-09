@@ -266,6 +266,12 @@ pub fn canvas(ui: &mut Ui, ws: &mut Workspace, settings: &AppSettings) {
         None if !compare => ws.preview.clone().unwrap_or_else(|| current.clone()),
         None => current.clone(),
     };
+    let shown = if ws.anim.active() && ws.drag_state.is_none() && ws.preview.is_none() {
+        ui.ctx().request_repaint();
+        ws.anim.apply(&shown)
+    } else {
+        shown
+    };
     {
         let media_vec: std::collections::HashMap<MediaId, oto_core::media::MediaItem> = shown
             .media_ids()
@@ -597,7 +603,26 @@ fn interact(ui: &mut Ui, ws: &mut Workspace, resp: &egui::Response, current: &Sp
             }
         }
     }
+    // --- Pattern drop from the Patterns tab ---
+    if let Some(k) = ws.drag_pattern {
+        if resp.contains_pointer() {
+            ui.ctx().set_cursor_icon(CursorIcon::Copy);
+        }
+        if ui.input(|i| i.pointer.any_released()) {
+            if resp.contains_pointer() {
+                ws.set_pattern(k);
+            }
+            ws.drag_pattern = None;
+        }
+    }
     let Some(p) = ptr else { return };
+    if resp.hovered() {
+        let np = to_norm(p);
+        ws.hover_media = hit_items(current, surf, np).into_iter().find_map(|id| current.frame(id).and_then(|f| f.image_id));
+    }
+    if space && ui.input(|i| i.pointer.any_down()) {
+        ws.space_panned = true;
+    }
     let np = to_norm(p);
 
     // --- Crop mode ---
@@ -1075,6 +1100,21 @@ fn drop_media(ws: &mut Workspace, current: &Spread, surf: &Surface, ids: &[Media
         ws.commit(laid, "Place photos");
         return;
     }
+    if matches!(ws.target, Target::Spread(_)) && !current.locked {
+        // SmartAlbums-style: adding photos re-designs the spread for the new photo count.
+        let mut grown = current.clone();
+        for id in ids {
+            if grown.frames.iter().any(|f| f.image_id == Some(*id)) {
+                continue;
+            }
+            let mut f = Frame::new(NRect::new(0.0, 0.0, 0.1, 0.1));
+            f.image_id = Some(*id);
+            grown.frames.push(f);
+        }
+        ws.sel.clear();
+        ws.relayout_best(grown, "Add photo");
+        return;
+    }
     let mut f = Frame::new(NRect::new(at.x - 0.12, at.y - 0.15, 0.24, 0.3).clamp_to_unit());
     f.image_id = Some(first);
     f.z = s.max_z() + 1;
@@ -1175,7 +1215,15 @@ pub fn delete_selected(ws: &mut Workspace, current: &Spread) {
         }
     }
     if n > 0 {
-        ws.commit(s, "Delete");
+        let removed_photo = current.frames.iter().filter(|f| f.image_id.is_some()).count() > s.frames.iter().filter(|f| f.image_id.is_some()).count();
+        let photos_left = s.frames.iter().filter(|f| f.image_id.is_some()).count();
+        // Removing a photo re-designs the spread for the photos that are left (empty frames are dropped).
+        if removed_photo && photos_left > 0 && matches!(ws.target, Target::Spread(_)) && !s.locked {
+            s.frames.retain(|f| f.image_id.is_some());
+            ws.relayout_best(s, "Remove photo");
+        } else {
+            ws.commit(s, "Delete");
+        }
         ws.sel.clear();
     }
 }
@@ -1256,7 +1304,19 @@ pub fn keys(ctx: &egui::Context, ws: &mut Workspace) {
         }
     }
     if enter {
-        ws.crop_mode = None;
+        // Return = double-click: enter photo edit (crop) mode for the selected photo; Return again leaves.
+        ws.crop_mode = if ws.crop_mode.is_some() { None } else { ws.sel.first().copied().filter(|id| current.frames.iter().any(|f| f.id == *id && f.image_id.is_some())) };
+    }
+    let (space_up, quick_close) = ctx.input(|i| (i.key_released(Key::Space), i.key_pressed(Key::Escape)));
+    if quick_close && ws.quick_look.is_some() {
+        ws.toggle_quick_look(None);
+    }
+    if space_up {
+        if !ws.space_panned {
+            let id = ws.hover_media.or_else(|| ws.sel.first().and_then(|s| current.frame(*s)).and_then(|f| f.image_id));
+            ws.toggle_quick_look(id);
+        }
+        ws.space_panned = false;
     }
     if c_key {
         ws.crop_mode = if ws.crop_mode.is_some() { None } else { ws.sel.first().copied().filter(|id| current.frames.iter().any(|f| f.id == *id && f.image_id.is_some())) };
@@ -1272,6 +1332,30 @@ pub fn keys(ctx: &egui::Context, ws: &mut Workspace) {
     }
     if cmd_d {
         duplicate(ws, &current);
+    }
+    // Arrow keys follow the mode: photo edit mode pans the crop; a selected text/shape is nudged;
+    // otherwise Up/Down change the design and Left/Right go to the previous/next spread.
+    if arrows != Vec2::ZERO {
+        if let Some(fid) = ws.crop_mode {
+            let step = if shift { 0.05 } else { 0.01 };
+            let mut s = current.clone();
+            if let Some(f) = s.frame_mut(fid) {
+                f.crop.center_norm.x = (f.crop.center_norm.x + arrows.x * step).clamp(0.0, 1.0);
+                f.crop.center_norm.y = (f.crop.center_norm.y + arrows.y * step).clamp(0.0, 1.0);
+                f.crop_manual = true;
+            }
+            ws.commit(s, "Move photo in frame");
+            return;
+        }
+        let free_items = !ws.sel.is_empty() && ws.sel.iter().all(|id| current.frames.iter().all(|f| f.id != *id));
+        if !free_items {
+            if arrows.y != 0.0 {
+                ws.variation(if arrows.y > 0.0 { 1 } else { -1 });
+            } else if arrows.x != 0.0 {
+                ws.step_spread(if arrows.x > 0.0 { 1 } else { -1 });
+            }
+            return;
+        }
     }
     if arrows != Vec2::ZERO && !ws.sel.is_empty() {
         // 1 screen px (10 with Shift) at the current zoom.

@@ -48,23 +48,23 @@ pub fn tile(p: &Pattern) -> (f32, Vec<Prim>) {
             pts.iter().map(|&(x, y, r)| Prim::Circle { cx: x * s, cy: y * s, r: r * s }).collect()
         }
         // --- Formal grid collection: hairlines and quiet geometry. All coordinates are fractions of the tile.
-        PatternKind::FineGrid => vec![r(s, 0.0, 0.0, 0.025, 1.0), r(s, 0.0, 0.0, 1.0, 0.025)],
-        PatternKind::Windowpane => vec![r(s, 0.0, 0.0, 0.012, 1.0), r(s, 0.0, 0.0, 1.0, 0.012)],
-        PatternKind::DoubleGrid => vec![r(s, 0.0, 0.0, 0.015, 1.0), r(s, 0.09, 0.0, 0.015, 1.0), r(s, 0.0, 0.0, 1.0, 0.015), r(s, 0.0, 0.09, 1.0, 0.015)],
-        PatternKind::Tattersall => vec![r(s, 0.0, 0.0, 0.03, 1.0), r(s, 0.5, 0.0, 0.015, 1.0), r(s, 0.0, 0.0, 1.0, 0.03), r(s, 0.0, 0.5, 1.0, 0.015)],
-        PatternKind::Pinstripe => vec![r(s, 0.0, 0.0, 0.03, 1.0)],
-        PatternKind::Ticking => vec![r(s, 0.0, 0.0, 0.035, 1.0), r(s, 0.12, 0.0, 0.035, 1.0)],
+        PatternKind::FineGrid => vec![r(s, 0.0, 0.0, 0.045, 1.0), r(s, 0.0, 0.0, 1.0, 0.045)],
+        PatternKind::Windowpane => vec![r(s, 0.0, 0.0, 0.04, 1.0), r(s, 0.0, 0.0, 1.0, 0.04)],
+        PatternKind::DoubleGrid => vec![r(s, 0.0, 0.0, 0.028, 1.0), r(s, 0.09, 0.0, 0.028, 1.0), r(s, 0.0, 0.0, 1.0, 0.028), r(s, 0.0, 0.09, 1.0, 0.028)],
+        PatternKind::Tattersall => vec![r(s, 0.0, 0.0, 0.05, 1.0), r(s, 0.5, 0.0, 0.028, 1.0), r(s, 0.0, 0.0, 1.0, 0.05), r(s, 0.0, 0.5, 1.0, 0.028)],
+        PatternKind::Pinstripe => vec![r(s, 0.0, 0.0, 0.05, 1.0)],
+        PatternKind::Ticking => vec![r(s, 0.0, 0.0, 0.055, 1.0), r(s, 0.12, 0.0, 0.055, 1.0)],
         PatternKind::Pindot => vec![Prim::Circle { cx: s * 0.5, cy: s * 0.5, r: s * 0.06 }],
         PatternKind::OffsetDot => vec![Prim::Circle { cx: s * 0.25, cy: s * 0.25, r: s * 0.045 }, Prim::Circle { cx: s * 0.75, cy: s * 0.75, r: s * 0.045 }],
-        PatternKind::CrossGrid => vec![r(s, 0.38, 0.488, 0.24, 0.024), r(s, 0.488, 0.38, 0.024, 0.24)],
-        PatternKind::Lattice => vec![line(s, &[(0.0, 0.0), (1.0, 1.0)], 0.022), line(s, &[(0.0, 1.0), (1.0, 0.0)], 0.022)],
+        PatternKind::CrossGrid => vec![r(s, 0.36, 0.48, 0.28, 0.04), r(s, 0.48, 0.36, 0.04, 0.28)],
+        PatternKind::Lattice => vec![line(s, &[(0.0, 0.0), (1.0, 1.0)], 0.04), line(s, &[(0.0, 1.0), (1.0, 0.0)], 0.04)],
         PatternKind::Trellis => {
             let a: Vec<(f32, f32)> = (0..=24).map(|i| i as f32 / 24.0).map(|t| (0.5 + 0.34 * (t * std::f32::consts::TAU).sin(), t)).collect();
             let b: Vec<(f32, f32)> = a.iter().map(|&(x, y)| (1.0 - x, y)).collect();
-            vec![line(s, &a, 0.022), line(s, &b, 0.022)]
+            vec![line(s, &a, 0.04), line(s, &b, 0.04)]
         }
         PatternKind::Herringbone => {
-            vec![line(s, &[(0.0, 0.5), (0.5, 0.0)], 0.03), line(s, &[(0.0, 1.0), (0.5, 0.5)], 0.03), line(s, &[(0.5, 0.0), (1.0, 0.5)], 0.03), line(s, &[(0.5, 0.5), (1.0, 1.0)], 0.03)]
+            vec![line(s, &[(0.0, 0.5), (0.5, 0.0)], 0.05), line(s, &[(0.0, 1.0), (0.5, 0.5)], 0.05), line(s, &[(0.5, 0.0), (1.0, 0.5)], 0.05), line(s, &[(0.5, 0.5), (1.0, 1.0)], 0.05)]
         }
         PatternKind::Basketweave => vec![
             r(s, 0.04, 0.06, 0.42, 0.16),
@@ -76,15 +76,15 @@ pub fn tile(p: &Pattern) -> (f32, Vec<Prim>) {
             r(s, 0.06, 0.54, 0.16, 0.42),
             r(s, 0.28, 0.54, 0.16, 0.42),
         ],
-        PatternKind::Brick => vec![r(s, 0.0, 0.0, 1.0, 0.022), r(s, 0.0, 0.5, 1.0, 0.022), r(s, 0.0, 0.0, 0.022, 0.5), r(s, 0.5, 0.5, 0.022, 0.5)],
-        PatternKind::Scales => vec![line(s, &arc(0.5, 0.5, 0.5, 0.0, 180.0), 0.022), line(s, &arc(0.0, 0.0, 0.5, 0.0, 180.0), 0.022), line(s, &arc(1.0, 0.0, 0.5, 0.0, 180.0), 0.022)],
-        PatternKind::Arches => vec![line(s, &arc(0.5, 1.0, 0.42, 180.0, 360.0), 0.022), line(s, &arc(0.5, 1.0, 0.26, 180.0, 360.0), 0.022)],
+        PatternKind::Brick => vec![r(s, 0.0, 0.0, 1.0, 0.04), r(s, 0.0, 0.5, 1.0, 0.04), r(s, 0.0, 0.0, 0.04, 0.5), r(s, 0.5, 0.5, 0.04, 0.5)],
+        PatternKind::Scales => vec![line(s, &arc(0.5, 0.5, 0.5, 0.0, 180.0), 0.04), line(s, &arc(0.0, 0.0, 0.5, 0.0, 180.0), 0.04), line(s, &arc(1.0, 0.0, 0.5, 0.0, 180.0), 0.04)],
+        PatternKind::Arches => vec![line(s, &arc(0.5, 1.0, 0.42, 180.0, 360.0), 0.04), line(s, &arc(0.5, 1.0, 0.26, 180.0, 360.0), 0.04)],
         PatternKind::Meander => vec![line(s, &[(0.0, 0.85), (1.0, 0.85)], 0.045), line(s, &[(0.7, 0.85), (0.7, 0.15), (0.15, 0.15), (0.15, 0.6), (0.45, 0.6), (0.45, 0.4)], 0.045)],
-        PatternKind::Quatrefoil => [(0.5, 0.28), (0.5, 0.72), (0.28, 0.5), (0.72, 0.5)].iter().map(|&(x, y)| line(s, &arc(x, y, 0.22, 0.0, 360.0), 0.02)).collect(),
-        PatternKind::Rings => vec![line(s, &arc(0.5, 0.5, 0.32, 0.0, 360.0), 0.022), Prim::Circle { cx: 0.0, cy: 0.0, r: s * 0.04 }],
-        PatternKind::FineChevron => vec![line(s, &[(-0.01, 0.62), (0.5, 0.32), (1.01, 0.62)], 0.025)],
+        PatternKind::Quatrefoil => [(0.5, 0.28), (0.5, 0.72), (0.28, 0.5), (0.72, 0.5)].iter().map(|&(x, y)| line(s, &arc(x, y, 0.22, 0.0, 360.0), 0.036)).collect(),
+        PatternKind::Rings => vec![line(s, &arc(0.5, 0.5, 0.32, 0.0, 360.0), 0.04), Prim::Circle { cx: 0.0, cy: 0.0, r: s * 0.04 }],
+        PatternKind::FineChevron => vec![line(s, &[(-0.01, 0.62), (0.5, 0.32), (1.01, 0.62)], 0.045)],
         PatternKind::Twill => vec![line(s, &[(-0.1, 1.1), (1.1, -0.1)], 0.05)],
-        PatternKind::Plaid => vec![r(s, 0.0, 0.0, 0.12, 1.0), r(s, 0.3, 0.0, 0.02, 1.0), r(s, 0.0, 0.0, 1.0, 0.12), r(s, 0.0, 0.3, 1.0, 0.02)],
+        PatternKind::Plaid => vec![r(s, 0.0, 0.0, 0.12, 1.0), r(s, 0.3, 0.0, 0.02, 1.0), r(s, 0.0, 0.0, 1.0, 0.12), r(s, 0.0, 0.3, 1.0, 0.036)],
     };
     (s, prims)
 }

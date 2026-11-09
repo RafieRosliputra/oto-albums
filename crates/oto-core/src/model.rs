@@ -525,7 +525,7 @@ pub struct Pattern {
 
 impl Pattern {
     pub fn new(kind: PatternKind) -> Self {
-        Pattern { kind, scale_mm: kind.default_scale_mm(), angle_mdeg: 0, opacity: 0.6, color: PASTELS[3].1 }
+        Pattern { kind, scale_mm: kind.default_scale_mm(), angle_mdeg: 0, opacity: 0.9, color: PASTELS[9].1 }
     }
 }
 
