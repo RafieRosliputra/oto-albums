@@ -40,7 +40,14 @@ pub fn hub(ui: &mut Ui, settings: &mut AppSettings, search: &mut String) -> HubA
                 ui.label(RichText::new("1 choose the size · 2 import photos · 3 Auto Build · 4 edit · 5 export the print file").color(pal.muted));
                 ui.add_space(12.0);
                 ui.horizontal(|ui| {
-                    if ui.add(egui::Button::new(RichText::new(format!("+ {}", t("Create your first album"))).strong().size(15.0).color(theme::ON_ACCENT)).min_size(Vec2::new(240.0, theme::HIT)).fill(pal.accent)).clicked() {
+                    if ui
+                        .add(
+                            egui::Button::new(RichText::new(format!("+ {}", t("Create your first album"))).strong().size(15.0).color(theme::ON_ACCENT))
+                                .min_size(Vec2::new(240.0, theme::HIT))
+                                .fill(pal.accent),
+                        )
+                        .clicked()
+                    {
                         act = HubAction::New;
                     }
                     if ui.add(egui::Button::new(t("Open project…")).min_size(Vec2::new(160.0, theme::HIT))).clicked() {

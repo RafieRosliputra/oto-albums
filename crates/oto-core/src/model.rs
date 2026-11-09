@@ -348,10 +348,87 @@ pub enum PatternKind {
     Chevron,
     Waves,
     Confetti,
+    FineGrid,
+    Windowpane,
+    DoubleGrid,
+    Tattersall,
+    Pinstripe,
+    Ticking,
+    Pindot,
+    OffsetDot,
+    CrossGrid,
+    Lattice,
+    Trellis,
+    Herringbone,
+    Basketweave,
+    Brick,
+    Scales,
+    Arches,
+    Meander,
+    Quatrefoil,
+    Rings,
+    FineChevron,
+    Twill,
+    Plaid,
 }
 
 impl PatternKind {
-    pub const ALL: [PatternKind; 7] = [Self::Dots, Self::Stripes, Self::Grid, Self::Diagonal, Self::Chevron, Self::Waves, Self::Confetti];
+    pub const ALL: [PatternKind; 29] = [
+        Self::Dots,
+        Self::Stripes,
+        Self::Grid,
+        Self::Diagonal,
+        Self::Chevron,
+        Self::Waves,
+        Self::Confetti,
+        Self::FineGrid,
+        Self::Windowpane,
+        Self::DoubleGrid,
+        Self::Tattersall,
+        Self::Pinstripe,
+        Self::Ticking,
+        Self::Pindot,
+        Self::OffsetDot,
+        Self::CrossGrid,
+        Self::Lattice,
+        Self::Trellis,
+        Self::Herringbone,
+        Self::Basketweave,
+        Self::Brick,
+        Self::Scales,
+        Self::Arches,
+        Self::Meander,
+        Self::Quatrefoil,
+        Self::Rings,
+        Self::FineChevron,
+        Self::Twill,
+        Self::Plaid,
+    ];
+    /// The formal grid collection (thin lines, quiet geometry) shown first in the pattern picker.
+    pub const FORMAL: [PatternKind; 22] = [
+        Self::FineGrid,
+        Self::Windowpane,
+        Self::DoubleGrid,
+        Self::Tattersall,
+        Self::Pinstripe,
+        Self::Ticking,
+        Self::Pindot,
+        Self::OffsetDot,
+        Self::CrossGrid,
+        Self::Lattice,
+        Self::Trellis,
+        Self::Herringbone,
+        Self::Basketweave,
+        Self::Brick,
+        Self::Scales,
+        Self::Arches,
+        Self::Meander,
+        Self::Quatrefoil,
+        Self::Rings,
+        Self::FineChevron,
+        Self::Twill,
+        Self::Plaid,
+    ];
     pub fn label(self) -> &'static str {
         match self {
             Self::Dots => "Dots",
@@ -361,9 +438,79 @@ impl PatternKind {
             Self::Chevron => "Chevron",
             Self::Waves => "Waves",
             Self::Confetti => "Confetti",
+            Self::FineGrid => "Fine grid",
+            Self::Windowpane => "Windowpane",
+            Self::DoubleGrid => "Double grid",
+            Self::Tattersall => "Tattersall",
+            Self::Pinstripe => "Pinstripe",
+            Self::Ticking => "Ticking",
+            Self::Pindot => "Pin dot",
+            Self::OffsetDot => "Offset dot",
+            Self::CrossGrid => "Cross grid",
+            Self::Lattice => "Lattice",
+            Self::Trellis => "Trellis",
+            Self::Herringbone => "Herringbone",
+            Self::Basketweave => "Basketweave",
+            Self::Brick => "Brick",
+            Self::Scales => "Scales",
+            Self::Arches => "Arches",
+            Self::Meander => "Meander",
+            Self::Quatrefoil => "Quatrefoil",
+            Self::Rings => "Rings",
+            Self::FineChevron => "Fine chevron",
+            Self::Twill => "Twill",
+            Self::Plaid => "Plaid",
+        }
+    }
+    /// Repeat size that reads well at print size, in mm.
+    pub fn default_scale_mm(self) -> f32 {
+        match self {
+            Self::Dots => 8.0,
+            Self::Stripes => 8.0,
+            Self::Grid => 8.0,
+            Self::Diagonal => 8.0,
+            Self::Chevron => 8.0,
+            Self::Waves => 8.0,
+            Self::Confetti => 8.0,
+            Self::FineGrid => 6.0,
+            Self::Windowpane => 26.0,
+            Self::DoubleGrid => 14.0,
+            Self::Tattersall => 12.0,
+            Self::Pinstripe => 6.0,
+            Self::Ticking => 10.0,
+            Self::Pindot => 5.0,
+            Self::OffsetDot => 8.0,
+            Self::CrossGrid => 10.0,
+            Self::Lattice => 12.0,
+            Self::Trellis => 14.0,
+            Self::Herringbone => 8.0,
+            Self::Basketweave => 10.0,
+            Self::Brick => 12.0,
+            Self::Scales => 10.0,
+            Self::Arches => 14.0,
+            Self::Meander => 12.0,
+            Self::Quatrefoil => 16.0,
+            Self::Rings => 12.0,
+            Self::FineChevron => 10.0,
+            Self::Twill => 4.0,
+            Self::Plaid => 20.0,
         }
     }
 }
+
+/// Soft pastel inks for patterns (and backgrounds): quiet, print-safe colours.
+pub const PASTELS: [(&str, Rgba); 10] = [
+    ("Blush", Rgba::rgb(0xE9, 0xC9, 0xC4)),
+    ("Peach", Rgba::rgb(0xEE, 0xD0, 0xB8)),
+    ("Butter", Rgba::rgb(0xEE, 0xE1, 0xB9)),
+    ("Champagne", Rgba::rgb(0xE3, 0xD5, 0xBB)),
+    ("Sage", Rgba::rgb(0xC3, 0xD1, 0xBC)),
+    ("Mint", Rgba::rgb(0xC4, 0xDE, 0xD3)),
+    ("Sky", Rgba::rgb(0xC2, 0xD4, 0xE3)),
+    ("Lavender", Rgba::rgb(0xD3, 0xCA, 0xE3)),
+    ("Dove", Rgba::rgb(0xD3, 0xD0, 0xCB)),
+    ("Taupe", Rgba::rgb(0xC9, 0xBC, 0xAE)),
+];
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Pattern {
@@ -377,7 +524,7 @@ pub struct Pattern {
 
 impl Pattern {
     pub fn new(kind: PatternKind) -> Self {
-        Pattern { kind, scale_mm: 8.0, angle_mdeg: 0, opacity: 0.35, color: Rgba::rgb(0xB9, 0xA8, 0x8B) }
+        Pattern { kind, scale_mm: kind.default_scale_mm(), angle_mdeg: 0, opacity: 0.6, color: PASTELS[3].1 }
     }
 }
 

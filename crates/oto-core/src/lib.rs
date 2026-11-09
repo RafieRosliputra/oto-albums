@@ -4,6 +4,7 @@
 pub mod builtin;
 pub mod clean;
 pub mod crop;
+pub mod designs;
 pub mod document;
 pub mod expr;
 pub mod geometry;

@@ -297,10 +297,7 @@ impl Wizard {
                         if matches!(f.region, oto_core::template::Region::RightPage | oto_core::template::Region::Front) {
                             fx += 0.5;
                         }
-                        let r = Rect::from_min_size(
-                            Pos2::new(inner.min.x + fx * inner.width(), inner.min.y + f.y * inner.height()),
-                            Vec2::new(f.w * inner.width(), f.h * inner.height()),
-                        );
+                        let r = Rect::from_min_size(Pos2::new(inner.min.x + fx * inner.width(), inner.min.y + f.y * inner.height()), Vec2::new(f.w * inner.width(), f.h * inner.height()));
                         p.rect_filled(r, 1.0, if on { Color32::from_rgb(0x6E, 0xD3, 0xE8) } else { Color32::from_gray(206) });
                     }
                     if resp.clicked() {

@@ -787,7 +787,16 @@ impl OtoApp {
             egui::SidePanel::left("left").resizable(true).default_width(210.0).min_width(150.0).max_width(360.0).show(ctx, |ui| bookmap::book_map(ui, ws, &mut self.settings));
         }
         if !focus && self.settings.right_open {
-            egui::SidePanel::right("right").resizable(true).default_width(290.0).min_width(240.0).max_width(420.0).frame(egui::Frame::new().fill(egui::Color32::WHITE).inner_margin(egui::Margin::symmetric(12, 8))).show(ctx, |ui| { ui.style_mut().visuals = theme::panel_visuals(self.settings.theme); inspector::inspector(ui, ws, &self.settings); });
+            egui::SidePanel::right("right")
+                .resizable(true)
+                .default_width(290.0)
+                .min_width(240.0)
+                .max_width(420.0)
+                .frame(egui::Frame::new().fill(egui::Color32::WHITE).inner_margin(egui::Margin::symmetric(12, 8)))
+                .show(ctx, |ui| {
+                    ui.style_mut().visuals = theme::panel_visuals(self.settings.theme);
+                    inspector::inspector(ui, ws, &self.settings);
+                });
         }
         egui::CentralPanel::default().frame(egui::Frame::new().fill(theme::palette(self.settings.theme).canvas)).show(ctx, |ui| {
             egui::Frame::new().inner_margin(egui::Margin::symmetric(8, 4)).fill(theme::palette(self.settings.theme).panel).show(ui, |ui| canvas::toolbar(ui, ws));

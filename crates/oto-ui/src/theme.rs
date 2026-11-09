@@ -144,7 +144,6 @@ pub fn strong_font(size: f32) -> FontId {
     FontId::new(size, FontFamily::Name("strong".into()))
 }
 
-
 /// Palette for content drawn on the white inspector surface. The editor chrome is
 /// dark while the inspector stays white, so that panel always needs dark text.
 pub fn panel_palette(mode: ThemeMode) -> Palette {

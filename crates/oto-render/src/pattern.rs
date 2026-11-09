@@ -47,8 +47,67 @@ pub fn tile(p: &Pattern) -> (f32, Vec<Prim>) {
             let pts = [(0.12, 0.2, 0.05), (0.62, 0.12, 0.035), (0.4, 0.55, 0.045), (0.85, 0.7, 0.03), (0.2, 0.82, 0.03)];
             pts.iter().map(|&(x, y, r)| Prim::Circle { cx: x * s, cy: y * s, r: r * s }).collect()
         }
+        // --- Formal grid collection: hairlines and quiet geometry. All coordinates are fractions of the tile.
+        PatternKind::FineGrid => vec![r(s, 0.0, 0.0, 0.025, 1.0), r(s, 0.0, 0.0, 1.0, 0.025)],
+        PatternKind::Windowpane => vec![r(s, 0.0, 0.0, 0.012, 1.0), r(s, 0.0, 0.0, 1.0, 0.012)],
+        PatternKind::DoubleGrid => vec![r(s, 0.0, 0.0, 0.015, 1.0), r(s, 0.09, 0.0, 0.015, 1.0), r(s, 0.0, 0.0, 1.0, 0.015), r(s, 0.0, 0.09, 1.0, 0.015)],
+        PatternKind::Tattersall => vec![r(s, 0.0, 0.0, 0.03, 1.0), r(s, 0.5, 0.0, 0.015, 1.0), r(s, 0.0, 0.0, 1.0, 0.03), r(s, 0.0, 0.5, 1.0, 0.015)],
+        PatternKind::Pinstripe => vec![r(s, 0.0, 0.0, 0.03, 1.0)],
+        PatternKind::Ticking => vec![r(s, 0.0, 0.0, 0.035, 1.0), r(s, 0.12, 0.0, 0.035, 1.0)],
+        PatternKind::Pindot => vec![Prim::Circle { cx: s * 0.5, cy: s * 0.5, r: s * 0.06 }],
+        PatternKind::OffsetDot => vec![Prim::Circle { cx: s * 0.25, cy: s * 0.25, r: s * 0.045 }, Prim::Circle { cx: s * 0.75, cy: s * 0.75, r: s * 0.045 }],
+        PatternKind::CrossGrid => vec![r(s, 0.38, 0.488, 0.24, 0.024), r(s, 0.488, 0.38, 0.024, 0.24)],
+        PatternKind::Lattice => vec![line(s, &[(0.0, 0.0), (1.0, 1.0)], 0.022), line(s, &[(0.0, 1.0), (1.0, 0.0)], 0.022)],
+        PatternKind::Trellis => {
+            let a: Vec<(f32, f32)> = (0..=24).map(|i| i as f32 / 24.0).map(|t| (0.5 + 0.34 * (t * std::f32::consts::TAU).sin(), t)).collect();
+            let b: Vec<(f32, f32)> = a.iter().map(|&(x, y)| (1.0 - x, y)).collect();
+            vec![line(s, &a, 0.022), line(s, &b, 0.022)]
+        }
+        PatternKind::Herringbone => {
+            vec![line(s, &[(0.0, 0.5), (0.5, 0.0)], 0.03), line(s, &[(0.0, 1.0), (0.5, 0.5)], 0.03), line(s, &[(0.5, 0.0), (1.0, 0.5)], 0.03), line(s, &[(0.5, 0.5), (1.0, 1.0)], 0.03)]
+        }
+        PatternKind::Basketweave => vec![
+            r(s, 0.04, 0.06, 0.42, 0.16),
+            r(s, 0.04, 0.28, 0.42, 0.16),
+            r(s, 0.54, 0.56, 0.42, 0.16),
+            r(s, 0.54, 0.78, 0.42, 0.16),
+            r(s, 0.56, 0.04, 0.16, 0.42),
+            r(s, 0.78, 0.04, 0.16, 0.42),
+            r(s, 0.06, 0.54, 0.16, 0.42),
+            r(s, 0.28, 0.54, 0.16, 0.42),
+        ],
+        PatternKind::Brick => vec![r(s, 0.0, 0.0, 1.0, 0.022), r(s, 0.0, 0.5, 1.0, 0.022), r(s, 0.0, 0.0, 0.022, 0.5), r(s, 0.5, 0.5, 0.022, 0.5)],
+        PatternKind::Scales => vec![line(s, &arc(0.5, 0.5, 0.5, 0.0, 180.0), 0.022), line(s, &arc(0.0, 0.0, 0.5, 0.0, 180.0), 0.022), line(s, &arc(1.0, 0.0, 0.5, 0.0, 180.0), 0.022)],
+        PatternKind::Arches => vec![line(s, &arc(0.5, 1.0, 0.42, 180.0, 360.0), 0.022), line(s, &arc(0.5, 1.0, 0.26, 180.0, 360.0), 0.022)],
+        PatternKind::Meander => vec![line(s, &[(0.0, 0.85), (1.0, 0.85)], 0.045), line(s, &[(0.7, 0.85), (0.7, 0.15), (0.15, 0.15), (0.15, 0.6), (0.45, 0.6), (0.45, 0.4)], 0.045)],
+        PatternKind::Quatrefoil => [(0.5, 0.28), (0.5, 0.72), (0.28, 0.5), (0.72, 0.5)].iter().map(|&(x, y)| line(s, &arc(x, y, 0.22, 0.0, 360.0), 0.02)).collect(),
+        PatternKind::Rings => vec![line(s, &arc(0.5, 0.5, 0.32, 0.0, 360.0), 0.022), Prim::Circle { cx: 0.0, cy: 0.0, r: s * 0.04 }],
+        PatternKind::FineChevron => vec![line(s, &[(-0.01, 0.62), (0.5, 0.32), (1.01, 0.62)], 0.025)],
+        PatternKind::Twill => vec![line(s, &[(-0.1, 1.1), (1.1, -0.1)], 0.05)],
+        PatternKind::Plaid => vec![r(s, 0.0, 0.0, 0.12, 1.0), r(s, 0.3, 0.0, 0.02, 1.0), r(s, 0.0, 0.0, 1.0, 0.12), r(s, 0.0, 0.3, 1.0, 0.02)],
     };
     (s, prims)
+}
+
+/// Rect from tile fractions.
+fn r(s: f32, x: f32, y: f32, w: f32, h: f32) -> Prim {
+    Prim::Rect { x: x * s, y: y * s, w: w * s, h: h * s }
+}
+
+/// Stroked polyline from tile fractions (width also a fraction of the tile).
+fn line(s: f32, pts: &[(f32, f32)], width: f32) -> Prim {
+    Prim::Poly { pts: pts.iter().map(|&(x, y)| (x * s, y * s)).collect(), width: width * s }
+}
+
+/// Arc points in tile fractions; angles in degrees, y down (0° = +x, 90° = down).
+fn arc(cx: f32, cy: f32, r: f32, a0: f32, a1: f32) -> Vec<(f32, f32)> {
+    let n = 32;
+    (0..=n)
+        .map(|i| {
+            let a = (a0 + (a1 - a0) * i as f32 / n as f32).to_radians();
+            (cx + r * a.cos(), cy + r * a.sin())
+        })
+        .collect()
 }
 
 fn seg_dist2(px: f32, py: f32, a: (f32, f32), b: (f32, f32)) -> f32 {
